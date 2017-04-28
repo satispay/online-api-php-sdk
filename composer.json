@@ -1,0 +1,10 @@
+{
+  "name": "satispay/satispay-php",
+  "description": "Satispay PHP",
+  "require": {
+    "php": ">=5.6",
+    "ext-curl": "*",
+    "ext-json": "*",
+    "ext-mbstring": "*"
+  }
+}
