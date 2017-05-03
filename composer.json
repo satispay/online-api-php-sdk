@@ -1,6 +1,6 @@
 {
-  "name": "satispay/satispay-php",
-  "description": "Satispay PHP",
+  "name": "satispay/online-api-php-sdk",
+  "description": "Satispay Online API PHP SDK",
   "require": {
     "php": ">=5.6",
     "ext-curl": "*",
