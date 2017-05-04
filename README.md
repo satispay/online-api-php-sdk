@@ -80,3 +80,33 @@ $charge = \Satispay\Charge::update('chargeid', [
   'description' => 'newdescription'
 ]);
 ```
+
+### Refunds
+
+#### Create a refund
+Example:
+```php
+\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+
+$refund = \Satispay\Refund::create([
+  'charge_id' => 'chargeid',
+  'currency' => 'EUR',
+  'amount' => 1000
+]);
+```
+
+#### Get a refund list
+Example:
+```php
+\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+
+$refunds = \Satispay\Refund::all();
+```
+
+#### Get a refund
+Example:
+```php
+\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+
+$refund = \Satispay\Refund::get('refundid');
+```
