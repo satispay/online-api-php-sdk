@@ -6,7 +6,6 @@ use Satispay\Satispay;
 class Bearer {
   public static function check() {
     $result = Satispay::request('/wally-services/protocol/authenticated');
-    print_r($result);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {
