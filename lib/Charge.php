@@ -1,11 +1,11 @@
 <?php
-namespace Satispay;
+namespace SatispayOnline;
 
-use Satispay\Satispay;
+use SatispayOnline\Api;
 
 class Charge {
   public static function create($params = null) {
-    $result = Satispay::request('/online/v1/charges', 'POST', $params);
+    $result = Api::request('/online/v1/charges', 'POST', $params);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {
@@ -27,7 +27,7 @@ class Charge {
     $queryString = '';
     if (!empty($params))
       $queryString = http_build_query($params);
-    $result = Satispay::request('/online/v1/charges?'.$queryString);
+    $result = Api::request('/online/v1/charges?'.$queryString);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {
@@ -43,7 +43,7 @@ class Charge {
   }
 
   public static function get($id) {
-    $result = Satispay::request('/online/v1/charges/'.$id);
+    $result = Api::request('/online/v1/charges/'.$id);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {
@@ -62,7 +62,7 @@ class Charge {
   }
 
   public static function update($id, $params = null) {
-    $result = Satispay::request('/online/v1/charges/'.$id, 'PUT', $params);
+    $result = Api::request('/online/v1/charges/'.$id, 'PUT', $params);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {

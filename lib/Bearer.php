@@ -1,11 +1,11 @@
 <?php
-namespace Satispay;
+namespace SatispayOnline;
 
-use Satispay\Satispay;
+use SatispayOnline\Api;
 
 class Bearer {
   public static function check() {
-    $result = Satispay::request('/wally-services/protocol/authenticated');
+    $result = Api::request('/wally-services/protocol/authenticated');
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {

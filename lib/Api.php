@@ -1,7 +1,7 @@
 <?php
-namespace Satispay;
+namespace SatispayOnline;
 
-class Satispay {
+class Api {
   public static $securityBearer;
   public static $urlStaging = 'https://staging.authservices.satispay.com';
   public static $url = 'https://authservices.satispay.com';

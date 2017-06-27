@@ -1,5 +1,5 @@
 <?php
-require(dirname(__FILE__) . '/lib/Satispay.php');
+require(dirname(__FILE__) . '/lib/Api.php');
 
 require(dirname(__FILE__) . '/lib/User.php');
 require(dirname(__FILE__) . '/lib/Bearer.php');
