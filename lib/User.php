@@ -1,11 +1,11 @@
 <?php
-namespace Satispay;
+namespace SatispayOnline;
 
-use Satispay\Satispay;
+use SatispayOnline\Api;
 
 class User {
   public static function create($params = null) {
-    $result = Satispay::request('/online/v1/users', 'POST', $params);
+    $result = Api::request('/online/v1/users', 'POST', $params);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {
@@ -30,7 +30,7 @@ class User {
     $queryString = '';
     if (!empty($params))
       $queryString = http_build_query($params);
-    $result = Satispay::request('/online/v1/users?'.$queryString);
+    $result = Api::request('/online/v1/users?'.$queryString);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {
@@ -43,7 +43,7 @@ class User {
   }
 
   public static function get($id) {
-    $result = Satispay::request('/online/v1/users/'.$id);
+    $result = Api::request('/online/v1/users/'.$id);
     $body = $result['body'];
     if (!empty($body->code)) {
       switch($body->code) {

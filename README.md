@@ -3,10 +3,10 @@
 ### Check Bearer
 
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 try {
-  \Satispay\Bearer:check();
+  \SatispayOnline\Bearer:check();
   echo 'OK';
 } catch(\Exception $ex) {
   echo 'Invalid Security Bearer';
@@ -18,9 +18,9 @@ try {
 #### Create a user
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$user = \Satispay\User::create([
+$user = \SatispayOnline\User::create([
   'phone_number' => '+390000000000'
 ]);
 ```
@@ -28,17 +28,17 @@ $user = \Satispay\User::create([
 #### Get a user list
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$users = \Satispay\User::all();
+$users = \SatispayOnline\User::all();
 ```
 
 #### Get a user
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$user = \Satispay\User::get('userid');
+$user = \SatispayOnline\User::get('userid');
 ```
 
 ### Charges
@@ -46,9 +46,9 @@ $user = \Satispay\User::get('userid');
 #### Create a charge
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$charge = \Satispay\Charge::create([
+$charge = \SatispayOnline\Charge::create([
   'user_id' => 'userid',
   'currency' => 'EUR',
   'amount' => 1000
@@ -58,25 +58,25 @@ $charge = \Satispay\Charge::create([
 #### Get a charge list
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$charges = \Satispay\Charge::all();
+$charges = \SatispayOnline\Charge::all();
 ```
 
 #### Get a charge
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$charge = \Satispay\Charge::get('chargeid');
+$charge = \SatispayOnline\Charge::get('chargeid');
 ```
 
 #### Update a charge
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$charge = \Satispay\Charge::update('chargeid', [
+$charge = \SatispayOnline\Charge::update('chargeid', [
   'description' => 'newdescription'
 ]);
 ```
@@ -86,9 +86,9 @@ $charge = \Satispay\Charge::update('chargeid', [
 #### Create a refund
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$refund = \Satispay\Refund::create([
+$refund = \SatispayOnline\Refund::create([
   'charge_id' => 'chargeid',
   'currency' => 'EUR',
   'amount' => 1000
@@ -98,15 +98,15 @@ $refund = \Satispay\Refund::create([
 #### Get a refund list
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$refunds = \Satispay\Refund::all();
+$refunds = \SatispayOnline\Refund::all();
 ```
 
 #### Get a refund
 Example:
 ```php
-\Satispay\Satispay::setSecurityBearer('yoursecuritybearer');
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-$refund = \Satispay\Refund::get('refundid');
+$refund = \SatispayOnline\Refund::get('refundid');
 ```

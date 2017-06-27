@@ -4,8 +4,9 @@
   "license": "GPLv3",
   "keywords": [
     "satispay",
-    "payment method",
-    "api"
+    "online",
+    "api",
+    "sdk"
   ],
   "authors": [
     {
@@ -21,7 +22,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Satispay\\" : "lib/"
+      "SatispayOnline\\" : "lib/"
     }
   }
 }
