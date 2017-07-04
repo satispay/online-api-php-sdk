@@ -1,13 +1,8 @@
 {
   "name": "satispay/online-api-php-sdk",
   "description": "Satispay Online API PHP SDK",
-  "license": "GPLv3",
-  "keywords": [
-    "satispay",
-    "online",
-    "api",
-    "sdk"
-  ],
+  "license": "GPL-3.0",
+  "keywords": ["satispay", "online", "api", "php", "sdk"],
   "authors": [
     {
       "name": "Satispay",
@@ -22,7 +17,7 @@
   },
   "autoload": {
     "psr-4": {
-      "SatispayOnline\\" : "lib/"
+      "SatispayOnline\\": "lib/"
     }
   }
 }
