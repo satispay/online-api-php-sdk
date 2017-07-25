@@ -1,11 +1,14 @@
 <?php
 namespace SatispayOnline;
 
+define('SDKVERSION', '1.3.0');
+
 class Api {
   public static $securityBearer;
   public static $urlStaging = 'https://staging.authservices.satispay.com';
   public static $url = 'https://authservices.satispay.com';
   public static $staging = false;
+  public static $client = null;
 
   public static function setSecurityBearer($securityBearer) {
     self::$securityBearer = $securityBearer;
@@ -17,6 +20,10 @@ class Api {
 
   public static function setStaging($staging) {
     self::$staging = $staging;
+  }
+
+  public static function setClient($client) {
+    self::$client = $client;
   }
 
   public static function request($url, $method = null, $params = null) {
@@ -36,7 +43,12 @@ class Api {
 
     $headers = [
       'Authorization: Bearer '.self::$securityBearer,
-      'Content-Type: application/json'
+      'Content-Type: application/json',
+      'X-Satispay-Client: '.join(' ', [
+        self::$client,
+        'PHP/'.phpversion()
+      ]),
+      'User-Agent: SatispayOnlineApi-PHPSDK/'.SDKVERSION
     ];
     $opts[CURLOPT_HTTPHEADER] = $headers;
 
