@@ -6,7 +6,21 @@ https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
 ### Install with Composer
 `composer require satispay/online-api-php-sdk`
 
-### Check bearer
+### Configuration
+```php
+// Set security bearer
+\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
+
+// Set staging, true or false (not mandatory)
+\SatispayOnline\Api::setStaging(true);
+
+// Set client, use this format: Platform/x.x.x (not mandatory)
+\SatispayOnline\Api::setClient('WordPress/4.8 WooCommerce/3.1.1');
+```
+
+### Examples
+
+#### Check bearer
 
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
@@ -19,9 +33,9 @@ try {
 }
 ```
 
-### Users
+#### Users
 
-#### Create user
+Create user
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -30,23 +44,23 @@ $user = \SatispayOnline\User::create([
 ]);
 ```
 
-#### Get users
+Get users
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $users = \SatispayOnline\User::all();
 ```
 
-#### Get user
+Get user
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $user = \SatispayOnline\User::get('userid');
 ```
 
-### Charges
+#### Charges
 
-#### Create charge
+Create charge
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -57,21 +71,21 @@ $charge = \SatispayOnline\Charge::create([
 ]);
 ```
 
-#### Get charges
+Get charges
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $charges = \SatispayOnline\Charge::all();
 ```
 
-#### Get charge
+Get charge
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $charge = \SatispayOnline\Charge::get('chargeid');
 ```
 
-#### Update charge
+Update charge
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -80,9 +94,9 @@ $charge = \SatispayOnline\Charge::update('chargeid', [
 ]);
 ```
 
-### Refunds
+#### Refunds
 
-#### Create refund
+Create refund
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -93,14 +107,14 @@ $refund = \SatispayOnline\Refund::create([
 ]);
 ```
 
-#### Get refunds
+Get refunds
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $refunds = \SatispayOnline\Refund::all();
 ```
 
-#### Get refund
+Get refund
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
