@@ -6,7 +6,7 @@
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 try {
-  \SatispayOnline\Bearer:check();
+  \SatispayOnline\Bearer::check();
   echo 'OK';
 } catch(\Exception $ex) {
   echo 'Invalid Security Bearer';
