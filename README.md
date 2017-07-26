@@ -1,6 +1,12 @@
 ## Satispay Online API PHP SDK
 
-### Check Bearer
+### Documentation
+https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
+
+### Install with Composer
+`composer require satispay/online-api-php-sdk`
+
+### Check bearer
 
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
@@ -15,8 +21,7 @@ try {
 
 ### Users
 
-#### Create a user
-Example:
+#### Create user
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -25,16 +30,14 @@ $user = \SatispayOnline\User::create([
 ]);
 ```
 
-#### Get a user list
-Example:
+#### Get users
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $users = \SatispayOnline\User::all();
 ```
 
-#### Get a user
-Example:
+#### Get user
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -43,8 +46,7 @@ $user = \SatispayOnline\User::get('userid');
 
 ### Charges
 
-#### Create a charge
-Example:
+#### Create charge
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -55,24 +57,21 @@ $charge = \SatispayOnline\Charge::create([
 ]);
 ```
 
-#### Get a charge list
-Example:
+#### Get charges
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $charges = \SatispayOnline\Charge::all();
 ```
 
-#### Get a charge
-Example:
+#### Get charge
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $charge = \SatispayOnline\Charge::get('chargeid');
 ```
 
-#### Update a charge
-Example:
+#### Update charge
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -83,8 +82,7 @@ $charge = \SatispayOnline\Charge::update('chargeid', [
 
 ### Refunds
 
-#### Create a refund
-Example:
+#### Create refund
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
@@ -95,16 +93,14 @@ $refund = \SatispayOnline\Refund::create([
 ]);
 ```
 
-#### Get a refund list
-Example:
+#### Get refunds
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
 $refunds = \SatispayOnline\Refund::all();
 ```
 
-#### Get a refund
-Example:
+#### Get refund
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
