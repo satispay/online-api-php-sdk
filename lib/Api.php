@@ -41,15 +41,15 @@ class Api {
     $opts[CURLOPT_URL] = $api.$url;
     $opts[CURLOPT_RETURNTRANSFER] = true;
 
-    $headers = [
+    $headers = array(
       'Authorization: Bearer '.self::$securityBearer,
       'Content-Type: application/json',
-      'X-Satispay-Client: '.join(' ', [
+      'X-Satispay-Client: '.join(' ', array(
         self::$client,
         'PHP/'.phpversion()
-      ]),
+      )),
       'User-Agent: SatispayOnlineApi-PHPSDK/'.SDKVERSION
-    ];
+    );
     $opts[CURLOPT_HTTPHEADER] = $headers;
 
     if ($method == 'post') {
@@ -79,10 +79,10 @@ class Api {
       curl_close($curl);
     }
 
-    return [
+    return array(
       'body' => json_decode($rbody),
       'code' => $rcode,
       'error' => $error
-    ];
+    );
   }
 }
