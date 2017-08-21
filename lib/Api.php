@@ -52,7 +52,7 @@ class Api {
   }
 
   public static function request($url, $method = null, $params = null) {
-    $opts = [];
+    $opts = array();
     $curl = curl_init();
     $method = strtolower($method);
 
