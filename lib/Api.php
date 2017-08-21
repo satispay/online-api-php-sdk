@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace SatispayOnline;
 
-define('SDKVERSION', '1.3.0');
+define('SDKVERSION', '1.3.1');
 
 class Api {
   public static $securityBearer;
@@ -42,6 +42,13 @@ class Api {
 
   public static function setClient($client) {
     self::$client = $client;
+  }
+
+  public static function getClient() {
+    return join(' ', array(
+      self::$client,
+      'PHP/'.phpversion()
+    ))
   }
 
   public static function request($url, $method = null, $params = null) {
