@@ -19,7 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace SatispayOnline;
 
-define('SDKVERSION', '1.3.1');
+define('SDKVERSION', '1.3.2');
 
 class Api {
   public static $securityBearer;
