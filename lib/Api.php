@@ -48,7 +48,7 @@ class Api {
     return join(' ', array(
       self::$client,
       'PHP/'.phpversion()
-    ))
+    ));
   }
 
   public static function request($url, $method = null, $params = null) {
