@@ -25,7 +25,7 @@ class Api {
   public static $endpoint = 'https://authservices.satispay.com';
   public static $staging = false;
   public static $client = null;
-  public static $version = '1.3.3';
+  public static $version = '1.3.4';
 
   public static function setSecurityBearer($securityBearer) {
     self::$securityBearer = $securityBearer;
