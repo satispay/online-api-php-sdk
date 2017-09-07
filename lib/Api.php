@@ -19,14 +19,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace SatispayOnline;
 
-define('SDKVERSION', '1.3.3');
-
 class Api {
   public static $securityBearer;
-  public static $urlStaging = 'https://staging.authservices.satispay.com';
-  public static $url = 'https://authservices.satispay.com';
+  public static $endpointStaging = 'https://staging.authservices.satispay.com';
+  public static $endpoint = 'https://authservices.satispay.com';
   public static $staging = false;
   public static $client = null;
+  public static $version = '1.3.4';
 
   public static function setSecurityBearer($securityBearer) {
     self::$securityBearer = $securityBearer;
@@ -45,10 +44,10 @@ class Api {
   }
 
   public static function getClient() {
-    return join(' ', array(
+    return trim(join(' ', array(
       self::$client,
       'PHP/'.phpversion()
-    ));
+    )));
   }
 
   public static function request($url, $method = null, $params = null) {
@@ -56,11 +55,9 @@ class Api {
     $curl = curl_init();
     $method = strtolower($method);
 
-    $api = self::$url;
+    $api = self::$endpoint;
     if (self::$staging) {
-      $opts[CURLOPT_SSL_VERIFYPEER] = false;
-      $opts[CURLOPT_SSL_VERIFYHOST] = 0;
-      $api = self::$urlStaging;
+      $api = self::$endpointStaging;
     }
 
     $opts[CURLOPT_URL] = $api.$url;
@@ -69,11 +66,11 @@ class Api {
     $headers = array(
       'Authorization: Bearer '.self::$securityBearer,
       'Content-Type: application/json',
-      'X-Satispay-Client: '.join(' ', array(
+      'X-Satispay-Client: '.trim(join(' ', array(
         self::$client,
         'PHP/'.phpversion()
-      )),
-      'User-Agent: SatispayOnlineApi-PHPSDK/'.SDKVERSION
+      ))),
+      'User-Agent: SatispayOnlineApi-PHPSDK/'.self::$version
     );
     $opts[CURLOPT_HTTPHEADER] = $headers;
 
@@ -85,6 +82,10 @@ class Api {
       $opts[CURLOPT_POST] = 1;
     } else if ($method == 'put') {
       $opts[CURLOPT_CUSTOMREQUEST] = 'PUT';
+      $opts[CURLOPT_POST] = 1;
+      $opts[CURLOPT_POSTFIELDS] = json_encode($params);
+    } else if ($method == 'patch') {
+      $opts[CURLOPT_CUSTOMREQUEST] = 'PATCH';
       $opts[CURLOPT_POST] = 1;
       $opts[CURLOPT_POSTFIELDS] = json_encode($params);
     } else {
