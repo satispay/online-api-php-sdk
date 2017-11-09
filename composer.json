@@ -3,7 +3,7 @@
   "description": "Satispay Online API PHP SDK",
   "license": "GPL-3.0",
   "keywords": ["satispay", "online", "api", "php", "sdk"],
-  "version": "1.3.6",
+  "version": "1.4.0",
   "authors": [
     {
       "name": "Satispay",

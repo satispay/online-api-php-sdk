@@ -29,21 +29,9 @@ class User {
   public static function create($params = null) {
     $result = Api::request('/online/v1/users', 'POST', $params);
     $body = $result['body'];
-    if (!empty($body->code)) {
-      switch($body->code) {
-        case 52:
-          throw new \Exception('Shop validation error');
-          break;
-        case 36:
-          throw new \Exception('Phone number required');
-          break;
-        case 39:
-          throw new \Exception('Invalid phone number');
-          break;
-        case 49:
-          throw new \Exception('The phone number isn’t from a registered user');
-          break;
-      }
+    if (!empty($body->message) && !empty($body->code)) {
+      throw new \Exception($body->message, $body->code);
+      return;
     }
     return $body;
   }
@@ -54,12 +42,9 @@ class User {
       $queryString = http_build_query($params);
     $result = Api::request('/online/v1/users?'.$queryString);
     $body = $result['body'];
-    if (!empty($body->code)) {
-      switch($body->code) {
-        case 52:
-          throw new \Exception('Beneficiary validation error');
-          break;
-      }
+    if (!empty($body->message) && !empty($body->code)) {
+      throw new \Exception($body->message, $body->code);
+      return;
     }
     return $body;
   }
@@ -67,12 +52,9 @@ class User {
   public static function get($id) {
     $result = Api::request('/online/v1/users/'.$id);
     $body = $result['body'];
-    if (!empty($body->code)) {
-      switch($body->code) {
-        case 41:
-          throw new \Exception('UserShop don’t exist');
-          break;
-      }
+    if (!empty($body->message) && !empty($body->code)) {
+      throw new \Exception($body->message, $body->code);
+      return;
     }
     return $body;
   }
