@@ -39,6 +39,10 @@ class Api {
     return self::$securityBearer;
   }
 
+  public static function setSandbox($sandbox) {
+    self::setStaging($sandbox);
+  }
+
   public static function setStaging($staging) {
     self::$staging = $staging;
   }
