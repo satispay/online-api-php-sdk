@@ -28,12 +28,7 @@ use SatispayOnline\Api;
 class Refund {
   public static function create($params = null) {
     $result = Api::request('/online/v1/refunds', 'POST', $params);
-    $body = $result['body'];
-    if (!empty($body->message) && !empty($body->code)) {
-      throw new \Exception($body->message, $body->code);
-      return;
-    }
-    return $body;
+    return $result;
   }
 
   public static function all($params = null) {
@@ -41,31 +36,16 @@ class Refund {
     if (!empty($params))
       $queryString = http_build_query($params);
     $result = Api::request('/online/v1/refunds?'.$queryString);
-    $body = $result['body'];
-    if (!empty($body->message) && !empty($body->code)) {
-      throw new \Exception($body->message, $body->code);
-      return;
-    }
-    return $body;
+    return $result;
   }
 
   public static function get($id) {
     $result = Api::request('/online/v1/refunds/'.$id);
-    $body = $result['body'];
-    if (!empty($body->message) && !empty($body->code)) {
-      throw new \Exception($body->message, $body->code);
-      return;
-    }
-    return $body;
+    return $result;
   }
 
   public static function update($id, $params = null) {
     $result = Api::request('/online/v1/refunds/'.$id, 'PUT', $params);
-    $body = $result['body'];
-    if (!empty($body->message) && !empty($body->code)) {
-      throw new \Exception($body->message, $body->code);
-      return;
-    }
-    return $body;
+    return $result;
   }
 }

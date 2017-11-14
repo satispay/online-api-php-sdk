@@ -11,8 +11,8 @@ https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
 // Set security bearer
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
 
-// Set staging, true or false (not mandatory)
-\SatispayOnline\Api::setStaging(true);
+// Set sandbox, true or false (not mandatory), default false
+\SatispayOnline\Api::setSandbox(true);
 
 // Set client, use this format: Platform/x.x.x (not mandatory)
 \SatispayOnline\Api::setClient('WordPress/4.8 WooCommerce/3.1.1');

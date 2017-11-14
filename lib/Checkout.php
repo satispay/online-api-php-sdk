@@ -41,11 +41,6 @@ class Checkout {
    */
   public static function create($params = null) {
     $result = Api::request('/online/v1/checkouts', 'POST', $params);
-    $body = $result['body'];
-    if (!empty($body->message) && !empty($body->code)) {
-      throw new \Exception($body->message, $body->code);
-      return;
-    }
-    return $body;
+    return $result;
   }
 }
