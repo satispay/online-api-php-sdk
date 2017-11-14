@@ -28,11 +28,6 @@ use SatispayOnline\Api;
 class Bearer {
   public static function check() {
     $result = Api::request('/wally-services/protocol/authenticated');
-    $body = $result['body'];
-    if (!empty($body->message) && !empty($body->code)) {
-      throw new \Exception($body->message, $body->code);
-      return;
-    }
-    return $body;
+    return $result;
   }
 }

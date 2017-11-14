@@ -43,8 +43,16 @@ class Api {
     self::setStaging($sandbox);
   }
 
+  public static function getSandbox() {
+    return self::getStaging();
+  }
+
   public static function setStaging($staging) {
     self::$staging = $staging;
+  }
+
+  public static function getStaging() {
+    return self::$staging;
   }
 
   public static function setClient($client) {
@@ -102,21 +110,36 @@ class Api {
 
     curl_setopt_array($curl, $opts);
 
-    $rbody = curl_exec($curl);
+    $rawBody = curl_exec($curl);
+    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-    $rcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+    $errorn = curl_errno($curl);
+    $error = curl_error($curl);
 
-    $error = null;
-    if (curl_errno($curl)) {
-      $error = curl_error($curl);
-    } else {
-      curl_close($curl);
+    curl_close($curl);
+
+    if (!empty($errorn) && !empty($error)) {
+      throw new \Exception($error, $errorn);
+      return;
     }
 
-    return array(
-      'body' => json_decode($rbody),
-      'code' => $rcode,
-      'error' => $error
-    );
+    $isSuccess = true;
+    if ($status[0] !== 2) {
+      $isSuccess = false;
+    }
+
+    $body = json_decode($rawBody);
+
+    if (!$isSuccess) {
+      if (!empty($body->message) && !empty($body->code)) {
+        throw new \Exception($body->message, $body->code);
+        return;
+      } else {
+        throw new \Exception('HTTP status response is '.$status);
+        return;
+      }
+    }
+
+    return $body;
   }
 }
