@@ -29,7 +29,7 @@ class Api {
   public static $endpoint = 'https://authservices.satispay.com';
   public static $staging = false;
   public static $client = null;
-  public static $version = '1.4.1';
+  public static $version = '1.5.0';
 
   public static function setSecurityBearer($securityBearer) {
     self::$securityBearer = $securityBearer;
@@ -120,7 +120,6 @@ class Api {
 
     if (!empty($errorn) && !empty($error)) {
       throw new \Exception($error, $errorn);
-      return;
     }
 
     $isSuccess = true;
@@ -133,10 +132,8 @@ class Api {
     if (!$isSuccess) {
       if (!empty($body->message) && !empty($body->code)) {
         throw new \Exception($body->message, $body->code);
-        return;
       } else {
         throw new \Exception('HTTP status response is '.$status);
-        return;
       }
     }
 
