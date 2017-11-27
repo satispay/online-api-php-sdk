@@ -13,12 +13,6 @@ https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
 
 // Set sandbox, true or false (not mandatory), default false
 \SatispayOnline\Api::setSandbox(true);
-
-// Set client, use this format: Platform/x.x.x (not mandatory)
-\SatispayOnline\Api::setClient('WordPress/4.8 WooCommerce/3.1.1');
-
-// Get client
-\SatispayOnline\Api::getClient();
 ```
 
 ### Examples

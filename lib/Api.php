@@ -24,12 +24,16 @@
 namespace SatispayOnline;
 
 class Api {
-  public static $securityBearer;
   public static $endpointStaging = 'https://staging.authservices.satispay.com';
   public static $endpoint = 'https://authservices.satispay.com';
+  public static $version = '1.6.0';
+
+  public static $securityBearer = '';
   public static $staging = false;
-  public static $client = null;
-  public static $version = '1.5.0';
+  public static $pluginName = '';
+  public static $pluginVersion = '';
+  public static $platformVersion = '';
+  public static $type = 'API';
 
   public static function setSecurityBearer($securityBearer) {
     self::$securityBearer = $securityBearer;
@@ -55,15 +59,48 @@ class Api {
     return self::$staging;
   }
 
-  public static function setClient($client) {
-    self::$client = $client;
+  public static function getPluginName() {
+    return self::$pluginName;
   }
 
-  public static function getClient() {
-    return trim(join(' ', array(
-      self::$client,
-      'PHP/'.phpversion()
-    )));
+  public static function setPluginName($pluginName) {
+    self::$pluginName = $pluginName;
+  }
+
+  public static function getPluginVersion() {
+    return self::$pluginVersion;
+  }
+
+  public static function setPluginVersion($pluginVersion) {
+    self::$pluginVersion = $pluginVersion;
+  }
+
+  public static function getPlatformVersion() {
+    return self::$platformVersion;
+  }
+
+  public static function setPlatformVersion($platformVersion) {
+    self::$platformVersion = $platformVersion;
+  }
+
+  public static function getType() {
+    return self::$type;
+  }
+
+  public static function setType($type) {
+    self::$type = $type;
+  }
+
+  public static function getHeaders() {
+    return array(
+      'Authorization: Bearer '.self::$securityBearer,
+      'X-Satispay-Plugin-Name: '.self::getPluginName(),
+      'X-Satispay-Plugin-Version: '.self::getPluginVersion(),
+      'X-Satispay-Plugin-PlatformV: '.self::getPlatformVersion(),
+      'X-Satispay-Lang: PHP',
+      'X-Satispay-Type: '.self::getType(),
+      'User-Agent: SatispayOnlineApi-PHPSDK/'.self::$version
+    );
   }
 
   public static function request($url, $method = null, $params = null) {
@@ -79,34 +116,30 @@ class Api {
     $opts[CURLOPT_URL] = $api.$url;
     $opts[CURLOPT_RETURNTRANSFER] = true;
 
-    $headers = array(
-      'Authorization: Bearer '.self::$securityBearer,
-      'Content-Type: application/json',
-      'X-Satispay-Client: '.trim(join(' ', array(
-        self::$client,
-        'PHP/'.phpversion()
-      ))),
-      'User-Agent: SatispayOnlineApi-PHPSDK/'.self::$version
-    );
-    $opts[CURLOPT_HTTPHEADER] = $headers;
+    $headers = self::getHeaders();
 
     if ($method == 'post') {
       $opts[CURLOPT_POST] = 1;
       $opts[CURLOPT_POSTFIELDS] = json_encode($params);
-    } else if ($method == 'delete') {
-      $opts[CURLOPT_CUSTOMREQUEST] = 'DELETE';
-      $opts[CURLOPT_POST] = 1;
+      
+      $headers[] = 'Content-Type: application/json';
     } else if ($method == 'put') {
       $opts[CURLOPT_CUSTOMREQUEST] = 'PUT';
       $opts[CURLOPT_POST] = 1;
       $opts[CURLOPT_POSTFIELDS] = json_encode($params);
+
+      $headers[] = 'Content-Type: application/json';
     } else if ($method == 'patch') {
       $opts[CURLOPT_CUSTOMREQUEST] = 'PATCH';
       $opts[CURLOPT_POST] = 1;
       $opts[CURLOPT_POSTFIELDS] = json_encode($params);
+
+      $headers[] = 'Content-Type: application/json';
     } else {
       $opts[CURLOPT_HTTPGET] = 1;
     }
+
+    $opts[CURLOPT_HTTPHEADER] = $headers;
 
     curl_setopt_array($curl, $opts);
 
