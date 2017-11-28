@@ -26,19 +26,17 @@ namespace SatispayOnline;
 class Api {
   public static $endpointStaging = 'https://staging.authservices.satispay.com';
   public static $endpoint = 'https://authservices.satispay.com';
-  public static $version = '1.6.0';
+  public static $version = '1.6.1';
 
   public static $securityBearer = '';
   public static $staging = false;
   public static $pluginName = '';
   public static $pluginVersion = '';
-  public static $platformVersion = '';
   public static $type = 'API';
 
   public static function setSecurityBearer($securityBearer) {
     self::$securityBearer = $securityBearer;
   }
-
   public static function getSecurityBearer() {
     return self::$securityBearer;
   }
@@ -46,15 +44,12 @@ class Api {
   public static function setSandbox($sandbox) {
     self::setStaging($sandbox);
   }
-
   public static function getSandbox() {
     return self::getStaging();
   }
-
   public static function setStaging($staging) {
     self::$staging = $staging;
   }
-
   public static function getStaging() {
     return self::$staging;
   }
@@ -62,7 +57,6 @@ class Api {
   public static function getPluginName() {
     return self::$pluginName;
   }
-
   public static function setPluginName($pluginName) {
     self::$pluginName = $pluginName;
   }
@@ -70,23 +64,13 @@ class Api {
   public static function getPluginVersion() {
     return self::$pluginVersion;
   }
-
   public static function setPluginVersion($pluginVersion) {
     self::$pluginVersion = $pluginVersion;
-  }
-
-  public static function getPlatformVersion() {
-    return self::$platformVersion;
-  }
-
-  public static function setPlatformVersion($platformVersion) {
-    self::$platformVersion = $platformVersion;
   }
 
   public static function getType() {
     return self::$type;
   }
-
   public static function setType($type) {
     self::$type = $type;
   }
@@ -96,8 +80,6 @@ class Api {
       'Authorization: Bearer '.self::$securityBearer,
       'X-Satispay-Plugin-Name: '.self::getPluginName(),
       'X-Satispay-Plugin-Version: '.self::getPluginVersion(),
-      'X-Satispay-Plugin-PlatformV: '.self::getPlatformVersion(),
-      'X-Satispay-Lang: PHP',
       'X-Satispay-Type: '.self::getType(),
       'User-Agent: SatispayOnlineApi-PHPSDK/'.self::$version
     );
@@ -156,7 +138,7 @@ class Api {
     }
 
     $isSuccess = true;
-    if ($status[0] !== 2) {
+    if ($status < 200 || $status > 299) {
       $isSuccess = false;
     }
 
