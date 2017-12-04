@@ -26,12 +26,13 @@ namespace SatispayOnline;
 class Api {
   public static $endpointStaging = 'https://staging.authservices.satispay.com';
   public static $endpoint = 'https://authservices.satispay.com';
-  public static $version = '1.6.1';
+  public static $version = '1.6.2';
 
   public static $securityBearer = '';
   public static $staging = false;
   public static $pluginName = '';
   public static $pluginVersion = '';
+  public static $platformVersion = '';
   public static $type = 'API';
 
   public static function setSecurityBearer($securityBearer) {
@@ -68,6 +69,13 @@ class Api {
     self::$pluginVersion = $pluginVersion;
   }
 
+  public static function getPlatformVersion() {
+    return self::$platformVersion;
+  }
+  public static function setPlatformVersion($platformVersion) {
+    self::$platformVersion = $platformVersion;
+  }
+
   public static function getType() {
     return self::$type;
   }
@@ -80,6 +88,7 @@ class Api {
       'Authorization: Bearer '.self::$securityBearer,
       'X-Satispay-Plugin-Name: '.self::getPluginName(),
       'X-Satispay-Plugin-Version: '.self::getPluginVersion(),
+      'X-Satispay-Platformv: '.self::getPlatformVersion(),
       'X-Satispay-Type: '.self::getType(),
       'User-Agent: SatispayOnlineApi-PHPSDK/'.self::$version
     );
