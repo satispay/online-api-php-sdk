@@ -1,12 +1,22 @@
 ## Satispay Online API PHP SDK
 
-### Documentation
-https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
+[![Packagist Downloads](https://img.shields.io/packagist/v/satispay/online-api-php-sdk.svg?style=flat-square)](https://packagist.org/packages/satispay/online-api-php-sdk)
+[![Packagist Version](https://img.shields.io/packagist/dt/satispay/online-api-php-sdk.svg?style=flat-square)](https://packagist.org/packages/satispay/online-api-php-sdk)
 
-### Install with Composer
+## Composer Installation
+
+Run the following command:
+
 `composer require satispay/online-api-php-sdk`
 
-### Configuration
+## Manual Installation
+
+If you do not wish to use Composer, require the `init.php` file.
+
+`require_once('/path/init.php');`
+
+### Getting Started
+
 ```php
 // Set security bearer
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
@@ -15,9 +25,13 @@ https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
 \SatispayOnline\Api::setSandbox(true);
 ```
 
-### Examples
+## Documentation
 
-#### Check bearer
+https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
+
+## Examples
+
+### Check bearer
 
 ```php
 \SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
@@ -30,7 +44,7 @@ try {
 }
 ```
 
-#### Users
+### Users
 
 Create user
 ```php
@@ -55,7 +69,7 @@ Get user
 $user = \SatispayOnline\User::get('userid');
 ```
 
-#### Charges
+### Charges
 
 Create charge
 ```php
@@ -91,7 +105,7 @@ $charge = \SatispayOnline\Charge::update('chargeid', [
 ]);
 ```
 
-#### Refunds
+### Refunds
 
 Create refund
 ```php
