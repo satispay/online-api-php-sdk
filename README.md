@@ -7,13 +7,17 @@
 
 Run the following command:
 
-`composer require satispay/online-api-php-sdk`
+```bash
+composer require satispay/online-api-php-sdk
+```
 
 ## Manual Installation
 
 If you do not wish to use Composer, require the `init.php` file.
 
-`require_once('/path/init.php');`
+```php
+require_once('/path/init.php');
+```
 
 ## Getting Started
 
