@@ -15,7 +15,7 @@ If you do not wish to use Composer, require the `init.php` file.
 
 `require_once('/path/init.php');`
 
-### Getting Started
+## Getting Started
 
 ```php
 // Set security bearer
