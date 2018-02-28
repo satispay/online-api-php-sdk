@@ -4,7 +4,7 @@ namespace SatispayOnline;
 class Api {
   public static $endpointStaging = 'https://staging.authservices.satispay.com';
   public static $endpoint = 'https://authservices.satispay.com';
-  public static $version = '1.6.4';
+  public static $version = '1.6.5';
 
   public static $securityBearer = '';
   public static $staging = false;
