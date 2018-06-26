@@ -5,6 +5,10 @@ class Request {
   private $api;
   private $authservicesUrl;
 
+  /**
+   * Request constructor
+   * @param Api $api Api
+  */
   public function __construct($api) {
     $this->api = $api;
 
@@ -14,6 +18,29 @@ class Request {
     }
   }
 
+  /**
+   * GET request
+   * @param string $path Request path
+   * @param array $options Request options
+  */
+  public function get($path, $options = []) {
+    $requestOptions = [
+      "path" => $path,
+      "method" => "GET"
+    ];
+
+    if (!empty($options["sign"])) {
+      $requestOptions["sign"] = $options["sign"];
+    }
+
+    return $this->request($requestOptions);
+  }
+
+  /**
+   * POST request
+   * @param string $path Request path
+   * @param array $options Request options
+  */
   public function post($path, $options = []) {
     $requestOptions = [
       "path" => $path,
@@ -28,6 +55,10 @@ class Request {
     return $this->request($requestOptions);
   }
 
+  /**
+   * Sign request
+   * @param array $options Sign request options
+  */
   private function signRequest($options = []) {
     $headers = [];
 
@@ -63,6 +94,10 @@ class Request {
     ];
   }
 
+  /**
+   * Execute request
+   * @param array $options Request options
+  */
   private function request($options = []) {
     $body = "";
     $headers = [
@@ -119,6 +154,10 @@ class Request {
     return $responseData;
   }
 
+  /**
+   * Curl request
+   * @param array $options Curl options
+  */
   private function curl($options = []) {
     $curlOptions = array();
     $curl = curl_init();

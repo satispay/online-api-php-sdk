@@ -1,11 +1,11 @@
 <?php
 namespace SatispayOnline;
 
-class Charges {
+class Refunds {
   private $api;
 
   /**
-   * Charges constructor
+   * Refunds constructor
    * @param Api $api Api
   */
   public function __construct($api) {
@@ -13,22 +13,22 @@ class Charges {
   }
 
   /**
-   * Create charge
-   * @param array $body Charge body
+   * Create refund
+   * @param array $body Refund body
   */
   public function create($body) {
-    return $this->api->request->post("/online/v1/charges", [
+    return $this->api->request->post("/online/v1/refunds", [
       "body" => $body,
       "sign" => true
     ]);
   }
 
   /**
-   * Get charge
-   * @param string $id Charge id
+   * Get refund
+   * @param string $id Refund id
   */
   public function get($id) {
-    return $this->api->request->get("/online/v1/charges/$id", [
+    return $this->api->request->get("/online/v1/refunds/$id", [
       "sign" => true
     ]);
   }
