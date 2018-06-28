@@ -9,6 +9,7 @@ class Api {
   private $keyId;
   private $version = "2.0.0";
 
+  public $amounts;
   public $charges;
   public $checkouts;
   public $refunds;
@@ -40,6 +41,7 @@ class Api {
       $this->keyId = $options["keyId"];
     }
 
+    $this->amounts = new Amounts($this);
     $this->charges = new Charges($this);
     $this->checkouts = new Checkouts($this);
     $this->refunds = new Refunds($this);
@@ -66,7 +68,8 @@ class Api {
       "body" => [
         "public_key" => $generatedPublicKey,
         "token" => $token
-      ]
+      ],
+      "sign" => false
     ]);
 
     $this->privateKey = $generatedPrivateKey;
@@ -77,15 +80,17 @@ class Api {
 
   /**
    * Test authentication keys
-   * @return object Test authentication response
   */
   public function testAuthentication() {
-    return $this->request->post("/wally-services/protocol/tests", [
+    $result = $this->request->post("/wally-services/protocol/tests", [
       "body" => [
         "hello" => "world"
-      ],
-      "sign" => true
+      ]
     ]);
+
+    if ($result->authentication_key->role !== "ONLINE_SHOP") {
+      throw new \Exception("Invalid authentication");
+    }
   }
 
   /**

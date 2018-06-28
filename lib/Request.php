@@ -56,6 +56,44 @@ class Request {
   }
 
   /**
+   * PUT request
+   * @param string $path Request path
+   * @param array $options Request options
+  */
+  public function put($path, $options = []) {
+    $requestOptions = [
+      "path" => $path,
+      "method" => "PUT",
+      "body" => $options["body"]
+    ];
+
+    if (!empty($options["sign"])) {
+      $requestOptions["sign"] = $options["sign"];
+    }
+
+    return $this->request($requestOptions);
+  }
+
+  /**
+   * PATCH request
+   * @param string $path Request path
+   * @param array $options Request options
+  */
+  public function patch($path, $options = []) {
+    $requestOptions = [
+      "path" => $path,
+      "method" => "PATCH",
+      "body" => $options["body"]
+    ];
+
+    if (!empty($options["sign"])) {
+      $requestOptions["sign"] = $options["sign"];
+    }
+
+    return $this->request($requestOptions);
+  }
+
+  /**
    * Sign request
    * @param array $options Sign request options
   */
@@ -98,7 +136,7 @@ class Request {
    * Execute request
    * @param array $options Request options
   */
-  private function request($options = []) {
+  private function request($options = [ ]) {
     $body = "";
     $headers = [
       "Accept: application/json",
@@ -116,7 +154,12 @@ class Request {
       array_push($headers, "Content-Length: ".strlen($body));
     }
 
-    if (!empty($options["sign"]) && $options["sign"] === true) {
+    $sign = true;
+    if (!empty($options["sign"])) {
+      $sign = $options["sign"];
+    }
+
+    if ($sign) {
       $signResult = $this->signRequest([
         "body" => $body,
         "method" => $method,
