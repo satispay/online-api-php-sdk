@@ -41,7 +41,7 @@ class Api {
       $this->keyId = $options["keyId"];
     }
 
-    if (!empty($options["isSandbox"]) && $options["isSandbox"] === true) {
+    if (!empty($options["sandbox"]) && $options["sandbox"] === true) {
       $this->env = "staging";
     }
 
@@ -149,7 +149,7 @@ class Api {
    * Is sandbox enabled?
    * @return boolean
   */
-  public function getIsSandbox() {
+  public function getSandbox() {
     if ($this->env === "staging") {
       return true;
     } else {
@@ -161,7 +161,7 @@ class Api {
    * Enable or disable sandbox
    * @param boolean $value
   */
-  public function setIsSandbox($value) {
+  public function setSandbox($value) {
     if ($value === true) {
       $this->env = "staging";
     } else {

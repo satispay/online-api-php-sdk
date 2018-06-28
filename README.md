@@ -64,16 +64,16 @@ try {
 ```
 
 ## Enable Sandbox
-To enable sandbox pass `isSandbox` with value `true` as an argument in the `\SatispayOnline\Api` constructor.
+To enable sandbox pass `sandbox` with value `true` as an argument in the `\SatispayOnline\Api` constructor.
 ```php
-// Pass isSandbox = true to Api constructor
+// Pass sandbox = true to Api constructor
 $api = new \SatispayOnline\Api([
-  "isSandbox" => true
+  "sandbox" => true
   // Other arguments
 ]);
 ```
 
-You can also use the `setIsSandbox` function.
+You can also use the `setSandbox` function.
 ```php
-$api->setIsSandbox(true);
+$api->setSandbox(true);
 ```
