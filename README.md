@@ -24,8 +24,8 @@ Sign in to your [Dashboard](https://business.satispay.com) at [business.satispay
 Use the activation token with the `authenticateWithToken` function to generate and exchange a pair of RSA keys.
 
 Save the keys in your database or in a **safe place** not accesibile from your website.
-
 ```php
+// Initialize an empty Api
 $api = new \SatispayOnline\Api();
 
 // Authenticate and generate the keys
@@ -39,11 +39,8 @@ $serverPublicKey = $api->getServerPublicKey();
 ```
 
 To reuse the keys after authentication, pass them as an argument in the `\SatispayOnline\Api` constructor.
-
 ```php
-$api = new \SatispayOnline\Api();
-
-// Keys
+// Keys variables
 $publicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhk...";
 $privateKey = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...";
 $keyId = "ldg9sbq283og7ua1abpj989kbbm2g60us6f18c1sciq...";
@@ -64,4 +61,19 @@ try {
   echo $ex->message;
   exit;
 }
+```
+
+## Enable Sandbox
+To enable sandbox pass `isSandbox` with value `true` as an argument in the `\SatispayOnline\Api` constructor.
+```php
+// Pass isSandbox = true to Api constructor
+$api = new \SatispayOnline\Api([
+  "isSandbox" => true
+  // Other arguments
+]);
+```
+
+You can also use the `setIsSandbox` function.
+```php
+$api->setIsSandbox(true);
 ```

@@ -41,6 +41,10 @@ class Api {
       $this->keyId = $options["keyId"];
     }
 
+    if (!empty($options["isSandbox"]) && $options["isSandbox"] === true) {
+      $this->env = "staging";
+    }
+
     $this->amounts = new Amounts($this);
     $this->charges = new Charges($this);
     $this->checkouts = new Checkouts($this);
@@ -139,5 +143,29 @@ class Api {
   */
   public function getVersion() {
     return $this->version;
+  }
+
+  /**
+   * Is sandbox enabled?
+   * @return boolean
+  */
+  public function getIsSandbox() {
+    if ($this->env === "staging") {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  /**
+   * Enable or disable sandbox
+   * @param boolean $value
+  */
+  public function setIsSandbox($value) {
+    if ($value === true) {
+      $this->env = "staging";
+    } else {
+      $this->env = "production";
+    }
   }
 }
