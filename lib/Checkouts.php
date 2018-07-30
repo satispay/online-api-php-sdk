@@ -17,8 +17,9 @@ class Checkouts {
    * @param array $body Checkout body
   */
   public function create($body) {
-    return $this->api->request->post("/online/v1/checkouts", [
-      "body" => $body
-    ]);
+    return $this->api->request->post("/online/v1/checkouts", array(
+      "body" => $body,
+      "sign" => true
+    ));
   }
 }

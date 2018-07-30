@@ -47,12 +47,12 @@ $keyId = "ldg9sbq283og7ua1abpj989kbbm2g60us6f18c1sciq...";
 $serverPublicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhk...";
 
 // Pass keys to Api constructor
-$api = new \SatispayOnline\Api([
+$api = new \SatispayOnline\Api(array(
   "publicKey" => $publicKey,
   "privateKey" => $privateKey,
   "keyId" => $keyId,
   "serverPublicKey" => $serverPublicKey
-]);
+));
 
 // Test the authentication
 try {
@@ -67,10 +67,10 @@ try {
 To enable sandbox pass `sandbox` with value `true` as an argument in the `\SatispayOnline\Api` constructor.
 ```php
 // Pass sandbox = true to Api constructor
-$api = new \SatispayOnline\Api([
+$api = new \SatispayOnline\Api(array(
   "sandbox" => true
   // Other arguments
-]);
+));
 ```
 
 You can also use the `setSandbox` function.

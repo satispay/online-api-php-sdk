@@ -7,6 +7,7 @@ class Api {
   private $publicKey;
   private $serverPublicKey;
   private $keyId;
+  private $securityBearer;
   private $version = "2.0.0";
 
   public $amounts;
@@ -41,6 +42,10 @@ class Api {
       $this->keyId = $options["keyId"];
     }
 
+    if (!empty($options["securityBearer"])) {
+      $this->securityBearer = $options["securityBearer"];
+    }
+
     if (!empty($options["sandbox"]) && $options["sandbox"] === true) {
       $this->env = "staging";
     }
@@ -58,23 +63,22 @@ class Api {
    * @param string $token Authentication token
   */
   public function authenticateWithToken($token) {
-    $pkeyResource = openssl_pkey_new([
+    $pkeyResource = openssl_pkey_new(array(
       "digest_alg" => "sha256",
       "private_key_bits" => 2048
-    ]);
+    ));
 
     openssl_pkey_export($pkeyResource, $generatedPrivateKey);
 
     $pkeyResourceDetails = openssl_pkey_get_details($pkeyResource);
     $generatedPublicKey = $pkeyResourceDetails["key"];
 
-    $requestResult = $this->request->post("/wally-services/v2/auth/authentication_keys", [
-      "body" => [
+    $requestResult = $this->request->post("/wally-services/v2/auth/authentication_keys", array(
+      "body" => array(
         "public_key" => $generatedPublicKey,
         "token" => $token
-      ],
-      "sign" => false
-    ]);
+      )
+    ));
 
     $this->privateKey = $generatedPrivateKey;
     $this->publicKey = $generatedPublicKey;
@@ -86,11 +90,12 @@ class Api {
    * Test authentication keys
   */
   public function testAuthentication() {
-    $result = $this->request->post("/wally-services/protocol/tests", [
-      "body" => [
+    $result = $this->request->post("/wally-services/protocol/tests", array(
+      "body" => array(
         "hello" => "world"
-      ]
-    ]);
+      ),
+      "sign" => true
+    ));
 
     if ($result->authentication_key->role !== "ONLINE_SHOP") {
       throw new \Exception("Invalid authentication");
@@ -146,6 +151,22 @@ class Api {
   }
 
   /**
+   * Get security bearer
+   * @return string Security bearer value
+  */
+  public function getSecurityBearer() {
+    return $this->securityBearer;
+  }
+
+  // /**
+  //  * Get security bearer
+  //  * @param string $securityBearer
+  // */
+  // public function setSecurityBearer($securityBearer) {
+  //   $this->securityBearer = $securityBearer;
+  // }
+
+  /**
    * Is sandbox enabled?
    * @return boolean
   */
@@ -157,15 +178,15 @@ class Api {
     }
   }
 
-  /**
-   * Enable or disable sandbox
-   * @param boolean $value
-  */
-  public function setSandbox($value) {
-    if ($value === true) {
-      $this->env = "staging";
-    } else {
-      $this->env = "production";
-    }
-  }
+  // /**
+  //  * Enable or disable sandbox
+  //  * @param boolean $value
+  // */
+  // public function setSandbox($value) {
+  //   if ($value === true) {
+  //     $this->env = "staging";
+  //   } else {
+  //     $this->env = "production";
+  //   }
+  // }
 }

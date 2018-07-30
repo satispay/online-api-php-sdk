@@ -17,9 +17,10 @@ class Users {
    * @param array $body User body
   */
   public function create($body) {
-    return $this->api->request->post("/online/v1/users", [
-      "body" => $body
-    ]);
+    return $this->api->request->post("/online/v1/users", array(
+      "body" => $body,
+      "sign" => true
+    ));
   }
 
   /**
@@ -27,19 +28,23 @@ class Users {
    * @param string $id User id
   */
   public function get($id) {
-    return $this->api->request->get("/online/v1/users/$id");
+    return $this->api->request->get("/online/v1/users/$id", array(
+      "sign" => true
+    ));
   }
 
   /**
    * Get users list
    * @param array $options Options
   */
-  public function all($options = []) {
+  public function all($options = array()) {
     $queryString = "";
     if (!empty($options)) {
       $queryString .= "?";
       $queryString .= http_build_query($options);
     }
-    return $this->api->request->get("/online/v1/users$queryString");
+    return $this->api->request->get("/online/v1/users$queryString", array(
+      "sign" => true
+    ));
   }
 }

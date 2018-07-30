@@ -23,11 +23,11 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function get($path, $options = []) {
-    $requestOptions = [
+  public function get($path, $options = array()) {
+    $requestOptions = array(
       "path" => $path,
       "method" => "GET"
-    ];
+    );
 
     if (!empty($options["sign"])) {
       $requestOptions["sign"] = $options["sign"];
@@ -41,12 +41,12 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function post($path, $options = []) {
-    $requestOptions = [
+  public function post($path, $options = array()) {
+    $requestOptions = array(
       "path" => $path,
       "method" => "POST",
       "body" => $options["body"]
-    ];
+    );
 
     if (!empty($options["sign"])) {
       $requestOptions["sign"] = $options["sign"];
@@ -60,12 +60,12 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function put($path, $options = []) {
-    $requestOptions = [
+  public function put($path, $options = array()) {
+    $requestOptions = array(
       "path" => $path,
       "method" => "PUT",
       "body" => $options["body"]
-    ];
+    );
 
     if (!empty($options["sign"])) {
       $requestOptions["sign"] = $options["sign"];
@@ -79,12 +79,12 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function patch($path, $options = []) {
-    $requestOptions = [
+  public function patch($path, $options = array()) {
+    $requestOptions = array(
       "path" => $path,
       "method" => "PATCH",
       "body" => $options["body"]
-    ];
+    );
 
     if (!empty($options["sign"])) {
       $requestOptions["sign"] = $options["sign"];
@@ -97,51 +97,62 @@ class Request {
    * Sign request
    * @param array $options Sign request options
   */
-  private function signRequest($options = []) {
-    $headers = [];
+  private function signRequest($options = array()) {
+    $headers = array();
+    $authorizationHeader = "";
 
-    $digest = base64_encode(hash("sha256", $options["body"], true));
-    array_push($headers, "Digest: SHA-256=".$digest);
+    $privateKey = $this->api->getPrivateKey();
+    $keyId = $this->api->getKeyId();
+    $securityBearer = $this->api->getSecurityBearer();
 
-    $date = date("r");
-    array_push($headers, "Date: ".$date);
+    if (!empty($privateKey) && !empty($keyId)) {
+      $digest = base64_encode(hash("sha256", $options["body"], true));
+      array_push($headers, "Digest: SHA-256=".$digest);
 
-    $signature = "(request-target): ".strtolower($options["method"])." ".$options["path"]."\n";
-    $signature .= "host: ".str_replace("https://", "", $this->authservicesUrl)."\n";
-    if (!empty($options["body"])) {
-      $signature .= "content-type: application/json\n";
-      $signature .= "content-length: ".strlen($options["body"])."\n";
+      $date = date("r");
+      array_push($headers, "Date: ".$date);
+
+      $signature = "(request-target): ".strtolower($options["method"])." ".$options["path"]."\n";
+      $signature .= "host: ".str_replace("https://", "", $this->authservicesUrl)."\n";
+      if (!empty($options["body"])) {
+        $signature .= "content-type: application/json\n";
+        $signature .= "content-length: ".strlen($options["body"])."\n";
+      }
+      $signature .= "digest: SHA-256=$digest\n";
+      $signature .= "date: $date";
+
+      openssl_sign($signature, $signedSignature, $privateKey, OPENSSL_ALGO_SHA256);
+      $base64SignedSignature = base64_encode($signedSignature);
+
+      $signatureHeaders = "(request-target) host digest date";
+      if (!empty($options["body"])) {
+        $signatureHeaders = "(request-target) host content-type content-length digest date";
+      }
+
+      $authorizationHeader = "Signature keyId=\"$keyId\", algorithm=\"rsa-sha256\", headers=\"$signatureHeaders\", signature=\"$base64SignedSignature\"";
+    } else if (!empty($securityBearer)) {
+      $authorizationHeader = "Bearer $securityBearer";
     }
-    $signature .= "digest: SHA-256=$digest\n";
-    $signature .= "date: $date";
 
-    openssl_sign($signature, $signedSignature, $this->api->getPrivateKey(), OPENSSL_ALGO_SHA256);
-    $base64SignedSignature = base64_encode($signedSignature);
-
-    $signatureHeaders = "(request-target) host digest date";
-    if (!empty($options["body"])) {
-      $signatureHeaders = "(request-target) host content-type content-length digest date";
+    if (!empty($authorizationHeader)) {
+      array_push($headers, "Authorization: $authorizationHeader");
     }
 
-    $authorizationHeader = "Signature keyId=\"".$this->api->getKeyId()."\", algorithm=\"rsa-sha256\", headers=\"$signatureHeaders\", signature=\"$base64SignedSignature\"";
-
-    array_push($headers, "Authorization: ".$authorizationHeader);
-
-    return [
+    return array(
       "headers" => $headers
-    ];
+    );
   }
 
   /**
    * Execute request
    * @param array $options Request options
   */
-  private function request($options = [ ]) {
+  private function request($options = array()) {
     $body = "";
-    $headers = [
+    $headers = array(
       "Accept: application/json",
       "User-Agent: SatispayOnlineApiPhpSdk/".$this->api->getVersion()
-    ];
+    );
     $method = "GET";
 
     if (!empty($options["method"])) {
@@ -154,26 +165,26 @@ class Request {
       array_push($headers, "Content-Length: ".strlen($body));
     }
 
-    $sign = true;
+    $sign = false;
     if (!empty($options["sign"])) {
       $sign = $options["sign"];
     }
 
     if ($sign) {
-      $signResult = $this->signRequest([
+      $signResult = $this->signRequest(array(
         "body" => $body,
         "method" => $method,
         "path" => $options["path"]
-      ]);
+      ));
       $headers = array_merge($headers, $signResult["headers"]);
     }
 
-    $curlResult = $this->curl([
+    $curlResult = $this->curl(array(
       "url" => $this->authservicesUrl.$options["path"],
       "method" => $method,
       "body" => $body,
       "headers" => $headers
-    ]);
+    ));
 
     if (!empty($curlResult["errorCode"]) && !empty($curlResult["errorMessage"])) {
       throw new \Exception($curlResult["errorMessage"], $curlResult["errorCode"]);
@@ -201,7 +212,7 @@ class Request {
    * Curl request
    * @param array $options Curl options
   */
-  private function curl($options = []) {
+  private function curl($options = array()) {
     $curlOptions = array();
     $curl = curl_init();
 
@@ -233,11 +244,11 @@ class Request {
     $curlErrorMessage = curl_error($curl);
     curl_close($curl);
 
-    return [
+    return array(
       "body" => $responseJson,
       "status" => $responseStatus,
       "errorCode" => $curlErrorCode,
       "errorMessage" => $curlErrorMessage
-    ];
+    );
   }
 }

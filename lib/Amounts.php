@@ -16,12 +16,14 @@ class Amounts {
    * Get amounts
    * @param array $options Options
   */
-  public function get($options = []) {
+  public function get($options = array()) {
     $queryString = "";
     if (!empty($options)) {
       $queryString .= "?";
       $queryString .= http_build_query($options);
     }
-    return $this->api->request->get("/online/v1/amounts$queryString");
+    return $this->api->request->get("/online/v1/amounts$queryString", array(
+      "sign" => true
+    ));
   }
 }
