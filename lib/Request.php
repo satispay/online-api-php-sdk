@@ -2,26 +2,10 @@
 namespace SatispayOnline;
 
 class Request {
-  // private $api;
-  // private static $authservicesUrl = "https://authservices.satispay.com";
-
-  /**
-   * Request constructor
-   * @param Api $api Api
-  */
-  // public function __construct($api) {
-  //   $this->api = $api;
-
-  //   $this->authservicesUrl = "https://authservices.satispay.com";
-  //   if ($api->getEnv() !== "production") {
-  //     $this->authservicesUrl = "https://".$api->getEnv().".authservices.satispay.com";
-  //   }
-  // }
-
   /**
    * GET request
-   * @param string $path Request path
-   * @param array $options Request options
+   * @param string $path
+   * @param array $options
   */
   public static function get($path, $options = array()) {
     $requestOptions = array(
@@ -38,8 +22,8 @@ class Request {
 
   /**
    * POST request
-   * @param string $path Request path
-   * @param array $options Request options
+   * @param string $path
+   * @param array $options
   */
   public static function post($path, $options = array()) {
     $requestOptions = array(
@@ -57,8 +41,8 @@ class Request {
 
   /**
    * PUT request
-   * @param string $path Request path
-   * @param array $options Request options
+   * @param string $path
+   * @param array $options
   */
   public static function put($path, $options = array()) {
     $requestOptions = array(
@@ -76,8 +60,8 @@ class Request {
 
   /**
    * PATCH request
-   * @param string $path Request path
-   * @param array $options Request options
+   * @param string $path
+   * @param array $options
   */
   public static function patch($path, $options = array()) {
     $requestOptions = array(
@@ -95,7 +79,7 @@ class Request {
 
   /**
    * Sign request
-   * @param array $options Sign request options
+   * @param array $options
   */
   private static function signRequest($options = array()) {
     $headers = array();
@@ -145,7 +129,7 @@ class Request {
 
   /**
    * Execute request
-   * @param array $options Request options
+   * @param array $options
   */
   private static function request($options = array()) {
     $body = "";
@@ -210,7 +194,7 @@ class Request {
 
   /**
    * Curl request
-   * @param array $options Curl options
+   * @param array $options
   */
   private static function curl($options = array()) {
     $curlOptions = array();

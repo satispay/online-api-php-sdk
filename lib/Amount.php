@@ -4,7 +4,7 @@ namespace SatispayOnline;
 class Amount {
   /**
    * Get amounts
-   * @param array $options Options
+   * @param array $options
   */
   public static function all($options = array()) {
     $queryString = "";

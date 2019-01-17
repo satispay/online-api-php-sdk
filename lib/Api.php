@@ -11,45 +11,8 @@ class Api {
   private static $authservicesUrl = "https://authservices.satispay.com";
 
   /**
-   * Api constructor
-   * @param array $options Api options
-  */
-  // public function __construct($options = []) {
-  //   if (!empty($options["env"])) {
-  //     $this->env = $options["env"];
-  //   }
-
-  //   if (!empty($options["privateKey"])) {
-  //     $this->privateKey = $options["privateKey"];
-  //   }
-
-  //   if (!empty($options["publicKey"])) {
-  //     $this->publicKey = $options["publicKey"];
-  //   }
-
-  //   if (!empty($options["keyId"])) {
-  //     $this->keyId = $options["keyId"];
-  //   }
-
-  //   if (!empty($options["securityBearer"])) {
-  //     $this->securityBearer = $options["securityBearer"];
-  //   }
-
-  //   if (!empty($options["sandbox"]) && $options["sandbox"] === true) {
-  //     $this->env = "staging";
-  //   }
-
-  //   // $this->amounts = new Amounts($this);
-  //   // $this->charges = new Charges($this);
-  //   // $this->checkouts = new Checkouts($this);
-  //   // $this->refunds = new Refunds($this);
-  //   // $this->request = new Request($this);
-  //   // $this->users = new Users($this);
-  // }
-
-  /**
    * Generate new keys and authenticate with token
-   * @param string $token Authentication token
+   * @param string $token
   */
   public static function authenticateWithToken($token) {
     $pkeyResource = openssl_pkey_new(array(
@@ -172,7 +135,7 @@ class Api {
 
   /**
    * Get security bearer
-   * @return string Security bearer value
+   * @return string
   */
   public static function getSecurityBearer() {
     return self::$securityBearer;

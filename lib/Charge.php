@@ -4,7 +4,7 @@ namespace SatispayOnline;
 class Charge {
   /**
    * Create charge
-   * @param array $body Charge body
+   * @param array $body
   */
   public static function create($body) {
     return Request::post("/online/v1/charges", array(
@@ -15,7 +15,7 @@ class Charge {
 
   /**
    * Get charge
-   * @param string $id Charge id
+   * @param string $id
   */
   public static function get($id) {
     return Request::get("/online/v1/charges/$id", array(
@@ -25,7 +25,7 @@ class Charge {
 
   /**
    * Get charges list
-   * @param array $options Options
+   * @param array $options
   */
   public static function all($options = array()) {
     $queryString = "";
@@ -40,8 +40,8 @@ class Charge {
 
   /**
    * Update charge
-   * @param string $id Charge id
-   * @param array $body Charge body
+   * @param string $id
+   * @param array $body
   */
   public static function update($id, $body) {
     return Request::put("/online/v1/charges/$id", array(

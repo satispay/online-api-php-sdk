@@ -4,7 +4,7 @@ namespace SatispayOnline;
 class Refund {
   /**
    * Create refund
-   * @param array $body Refund body
+   * @param array $body
   */
   public static function create($body) {
     return Request::post("/online/v1/refunds", array(
@@ -15,7 +15,7 @@ class Refund {
 
   /**
    * Get refund
-   * @param string $id Refund id
+   * @param string $id
   */
   public static function get($id) {
     return Request::get("/online/v1/refunds/$id", array(
@@ -25,7 +25,7 @@ class Refund {
 
   /**
    * Get refunds list
-   * @param array $options Options
+   * @param array $options
   */
   public static function all($options = array()) {
     $queryString = "";
@@ -40,8 +40,8 @@ class Refund {
 
   /**
    * Update refund
-   * @param string $id Refund id
-   * @param array $body Refund body
+   * @param string $id
+   * @param array $body
   */
   public static function update($id, $body) {
     return Request::put("/online/v1/refunds/$id", array(

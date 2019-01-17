@@ -4,7 +4,7 @@ namespace SatispayOnline;
 class User {
   /**
    * Create user
-   * @param array $body User body
+   * @param array $body
   */
   public static function create($body) {
     return Request::post("/online/v1/users", array(
@@ -15,7 +15,7 @@ class User {
 
   /**
    * Get user
-   * @param string $id User id
+   * @param string $id
   */
   public static function get($id) {
     return Request::get("/online/v1/users/$id", array(
@@ -25,7 +25,7 @@ class User {
 
   /**
    * Get users list
-   * @param array $options Options
+   * @param array $options
   */
   public static function all($options = array()) {
     $queryString = "";

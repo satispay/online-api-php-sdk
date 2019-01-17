@@ -4,7 +4,7 @@ namespace SatispayOnline;
 class Checkout {
   /**
    * Create checkout
-   * @param array $body Checkout body
+   * @param array $body
   */
   public static function create($body) {
     return Request::post("/online/v1/checkouts", array(
