@@ -2,28 +2,28 @@
 namespace SatispayOnline;
 
 class Request {
-  private $api;
-  private $authservicesUrl;
+  // private $api;
+  // private static $authservicesUrl = "https://authservices.satispay.com";
 
   /**
    * Request constructor
    * @param Api $api Api
   */
-  public function __construct($api) {
-    $this->api = $api;
+  // public function __construct($api) {
+  //   $this->api = $api;
 
-    $this->authservicesUrl = "https://authservices.satispay.com";
-    if ($api->getEnv() !== "production") {
-      $this->authservicesUrl = "https://".$api->getEnv().".authservices.satispay.com";
-    }
-  }
+  //   $this->authservicesUrl = "https://authservices.satispay.com";
+  //   if ($api->getEnv() !== "production") {
+  //     $this->authservicesUrl = "https://".$api->getEnv().".authservices.satispay.com";
+  //   }
+  // }
 
   /**
    * GET request
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function get($path, $options = array()) {
+  public static function get($path, $options = array()) {
     $requestOptions = array(
       "path" => $path,
       "method" => "GET"
@@ -33,7 +33,7 @@ class Request {
       $requestOptions["sign"] = $options["sign"];
     }
 
-    return $this->request($requestOptions);
+    return self::request($requestOptions);
   }
 
   /**
@@ -41,7 +41,7 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function post($path, $options = array()) {
+  public static function post($path, $options = array()) {
     $requestOptions = array(
       "path" => $path,
       "method" => "POST",
@@ -52,7 +52,7 @@ class Request {
       $requestOptions["sign"] = $options["sign"];
     }
 
-    return $this->request($requestOptions);
+    return self::request($requestOptions);
   }
 
   /**
@@ -60,7 +60,7 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function put($path, $options = array()) {
+  public static function put($path, $options = array()) {
     $requestOptions = array(
       "path" => $path,
       "method" => "PUT",
@@ -71,7 +71,7 @@ class Request {
       $requestOptions["sign"] = $options["sign"];
     }
 
-    return $this->request($requestOptions);
+    return self::request($requestOptions);
   }
 
   /**
@@ -79,7 +79,7 @@ class Request {
    * @param string $path Request path
    * @param array $options Request options
   */
-  public function patch($path, $options = array()) {
+  public static function patch($path, $options = array()) {
     $requestOptions = array(
       "path" => $path,
       "method" => "PATCH",
@@ -90,20 +90,20 @@ class Request {
       $requestOptions["sign"] = $options["sign"];
     }
 
-    return $this->request($requestOptions);
+    return self::request($requestOptions);
   }
 
   /**
    * Sign request
    * @param array $options Sign request options
   */
-  private function signRequest($options = array()) {
+  private static function signRequest($options = array()) {
     $headers = array();
     $authorizationHeader = "";
 
-    $privateKey = $this->api->getPrivateKey();
-    $keyId = $this->api->getKeyId();
-    $securityBearer = $this->api->getSecurityBearer();
+    $privateKey = Api::getPrivateKey();
+    $keyId = Api::getKeyId();
+    $securityBearer = Api::getSecurityBearer();
 
     if (!empty($privateKey) && !empty($keyId)) {
       $digest = base64_encode(hash("sha256", $options["body"], true));
@@ -113,7 +113,7 @@ class Request {
       array_push($headers, "Date: ".$date);
 
       $signature = "(request-target): ".strtolower($options["method"])." ".$options["path"]."\n";
-      $signature .= "host: ".str_replace("https://", "", $this->authservicesUrl)."\n";
+      $signature .= "host: ".str_replace("https://", "", Api::getAuthservicesUrl())."\n";
       if (!empty($options["body"])) {
         $signature .= "content-type: application/json\n";
         $signature .= "content-length: ".strlen($options["body"])."\n";
@@ -147,11 +147,11 @@ class Request {
    * Execute request
    * @param array $options Request options
   */
-  private function request($options = array()) {
+  private static function request($options = array()) {
     $body = "";
     $headers = array(
       "Accept: application/json",
-      "User-Agent: SatispayOnlineApiPhpSdk/".$this->api->getVersion()
+      "User-Agent: SatispayOnlineApiPhpSdk/".Api::getVersion()
     );
     $method = "GET";
 
@@ -171,7 +171,7 @@ class Request {
     }
 
     if ($sign) {
-      $signResult = $this->signRequest(array(
+      $signResult = self::signRequest(array(
         "body" => $body,
         "method" => $method,
         "path" => $options["path"]
@@ -179,8 +179,8 @@ class Request {
       $headers = array_merge($headers, $signResult["headers"]);
     }
 
-    $curlResult = $this->curl(array(
-      "url" => $this->authservicesUrl.$options["path"],
+    $curlResult = self::curl(array(
+      "url" => Api::getAuthservicesUrl().$options["path"],
       "method" => $method,
       "body" => $body,
       "headers" => $headers
@@ -212,15 +212,15 @@ class Request {
    * Curl request
    * @param array $options Curl options
   */
-  private function curl($options = array()) {
+  private static function curl($options = array()) {
     $curlOptions = array();
     $curl = curl_init();
 
     $curlOptions[CURLOPT_URL] = $options["url"];
     $curlOptions[CURLOPT_RETURNTRANSFER] = true;
 
-    if ($options["method"] !== "GET") {
-      if ($options["method"] !== "POST") {
+    if ($options["method"] != "GET") {
+      if ($options["method"] != "POST") {
         $curlOptions[CURLOPT_CUSTOMREQUEST] = $options["method"];
       }
       $curlOptions[CURLOPT_POSTFIELDS] = $options["body"];
@@ -229,7 +229,7 @@ class Request {
       $curlOptions[CURLOPT_HTTPGET] = true;
     }
 
-    if ($this->api->getEnv() === "test") {
+    if (Api::getEnv() == "test") {
       $curlOptions[CURLOPT_VERBOSE] = true;
       $curlOptions[CURLOPT_SSL_VERIFYHOST] = false;
       $curlOptions[CURLOPT_SSL_VERIFYPEER] = false;

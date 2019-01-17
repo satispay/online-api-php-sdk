@@ -1,9 +1,9 @@
 <?php
 require_once(dirname(__FILE__) . "/lib/Api.php");
 
-require_once(dirname(__FILE__) . "/lib/Amounts.php");
-require_once(dirname(__FILE__) . "/lib/Charges.php");
-require_once(dirname(__FILE__) . "/lib/Checkouts.php");
-require_once(dirname(__FILE__) . "/lib/Refunds.php");
+require_once(dirname(__FILE__) . "/lib/Amount.php");
+require_once(dirname(__FILE__) . "/lib/Charge.php");
+require_once(dirname(__FILE__) . "/lib/Checkout.php");
+require_once(dirname(__FILE__) . "/lib/Refund.php");
 require_once(dirname(__FILE__) . "/lib/Request.php");
-require_once(dirname(__FILE__) . "/lib/Users.php");
+require_once(dirname(__FILE__) . "/lib/User.php");

@@ -1,23 +1,13 @@
 <?php
 namespace SatispayOnline;
 
-class Charges {
-  private $api;
-
-  /**
-   * Charges constructor
-   * @param Api $api Api
-  */
-  public function __construct($api) {
-    $this->api = $api;
-  }
-
+class Charge {
   /**
    * Create charge
    * @param array $body Charge body
   */
-  public function create($body) {
-    return $this->api->request->post("/online/v1/charges", array(
+  public static function create($body) {
+    return Request::post("/online/v1/charges", array(
       "body" => $body,
       "sign" => true
     ));
@@ -27,8 +17,8 @@ class Charges {
    * Get charge
    * @param string $id Charge id
   */
-  public function get($id) {
-    return $this->api->request->get("/online/v1/charges/$id", array(
+  public static function get($id) {
+    return Request::get("/online/v1/charges/$id", array(
       "sign" => true
     ));
   }
@@ -37,13 +27,13 @@ class Charges {
    * Get charges list
    * @param array $options Options
   */
-  public function all($options = array()) {
+  public static function all($options = array()) {
     $queryString = "";
     if (!empty($options)) {
       $queryString .= "?";
       $queryString .= http_build_query($options);
     }
-    return $this->api->request->get("/online/v1/charges$queryString", array(
+    return Request::get("/online/v1/charges$queryString", array(
       "sign" => true
     ));
   }
@@ -53,8 +43,8 @@ class Charges {
    * @param string $id Charge id
    * @param array $body Charge body
   */
-  public function update($id, $body) {
-    return $this->api->request->put("/online/v1/charges", array(
+  public static function update($id, $body) {
+    return Request::put("/online/v1/charges/$id", array(
       "body" => $body,
       "sign" => true
     ));

@@ -9,12 +9,12 @@
     "php",
     "sdk"
   ],
-  "homepage": "http://satispay.com",
+  "homepage": "https://www.satispay.com",
   "version": "2.0.0",
   "authors": [
     {
       "name": "Satispay",
-      "homepage": "http://satispay.com"
+      "homepage": "https://www.satispay.com"
     }
   ],
   "require": {

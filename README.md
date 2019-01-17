@@ -12,7 +12,7 @@ composer require satispay/online-api-php-sdk
 If you do not wish to use Composer, import the `init.php` file.
 
 ```php
-require_once('/path/init.php');
+require_once("/path/init.php");
 ```
 
 ## Documentation
@@ -25,55 +25,33 @@ Use the activation token with the `authenticateWithToken` function to generate a
 
 Save the keys in your database or in a **safe place** not accesibile from your website.
 ```php
-// Initialize an empty Api
-$api = new \SatispayOnline\Api();
-
 // Authenticate and generate the keys
-$api->authenticateWithToken("XXXXXX");
+\SatispayOnline\Api::authenticateWithToken("XXXXXX");
 
-// Export the keys
-$publicKey = $api->getPublicKey();
-$privateKey = $api->getPrivateKey();
-$keyId = $api->getKeyId();
-$serverPublicKey = $api->getServerPublicKey();
+// Export keys
+$publicKey = \SatispayOnline\Api::getPublicKey();
+$privateKey = \SatispayOnline\Api::getPrivateKey();
+$keyId = \SatispayOnline\Api::getKeyId();
 ```
 
-To reuse the keys after authentication, pass them as an argument in the `\SatispayOnline\Api` constructor.
+Reuse the keys after authentication.
 ```php
 // Keys variables
 $publicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhk...";
 $privateKey = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...";
 $keyId = "ldg9sbq283og7ua1abpj989kbbm2g60us6f18c1sciq...";
-$serverPublicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhk...";
 
-// Pass keys to Api constructor
-$api = new \SatispayOnline\Api(array(
-  "publicKey" => $publicKey,
-  "privateKey" => $privateKey,
-  "keyId" => $keyId,
-  "serverPublicKey" => $serverPublicKey
-));
+// Set keys
+\SatispayOnline\Api::setPublicKey($publicKey);
+\SatispayOnline\Api::setPrivateKey($privateKey);
+\SatispayOnline\Api::setKeyId($keyId);
 
 // Test the authentication
-try {
-  $api->testAuthentication();
-} catch(\Exception $ex) {
-  echo $ex->message;
-  exit;
-}
+\SatispayOnline\Api::testAuthentication();
 ```
 
 ## Enable Sandbox
-To enable sandbox pass `sandbox` with value `true` as an argument in the `\SatispayOnline\Api` constructor.
+To enable sandbox use `setSandbox` with value `true`.
 ```php
-// Pass sandbox = true to Api constructor
-$api = new \SatispayOnline\Api(array(
-  "sandbox" => true
-  // Other arguments
-));
-```
-
-You can also use the `setSandbox` function.
-```php
-$api->setSandbox(true);
+\SatispayOnline\Api::setSandbox(true);
 ```

@@ -1,23 +1,13 @@
 <?php
 namespace SatispayOnline;
 
-class Refunds {
-  private $api;
-
-  /**
-   * Refunds constructor
-   * @param Api $api Api
-  */
-  public function __construct($api) {
-    $this->api = $api;
-  }
-
+class Refund {
   /**
    * Create refund
    * @param array $body Refund body
   */
-  public function create($body) {
-    return $this->api->request->post("/online/v1/refunds", array(
+  public static function create($body) {
+    return Request::post("/online/v1/refunds", array(
       "body" => $body,
       "sign" => true
     ));
@@ -27,8 +17,8 @@ class Refunds {
    * Get refund
    * @param string $id Refund id
   */
-  public function get($id) {
-    return $this->api->request->get("/online/v1/refunds/$id", array(
+  public static function get($id) {
+    return Request::get("/online/v1/refunds/$id", array(
       "sign" => true
     ));
   }
@@ -37,13 +27,13 @@ class Refunds {
    * Get refunds list
    * @param array $options Options
   */
-  public function all($options = array()) {
+  public static function all($options = array()) {
     $queryString = "";
     if (!empty($options)) {
       $queryString .= "?";
       $queryString .= http_build_query($options);
     }
-    return $this->api->request->get("/online/v1/refunds$queryString", array(
+    return Request::get("/online/v1/refunds$queryString", array(
       "sign" => true
     ));
   }
@@ -53,8 +43,8 @@ class Refunds {
    * @param string $id Refund id
    * @param array $body Refund body
   */
-  public function update($id, $body) {
-    return $this->api->request->put("/online/v1/refunds", array(
+  public static function update($id, $body) {
+    return Request::put("/online/v1/refunds/$id", array(
       "body" => $body,
       "sign" => true
     ));

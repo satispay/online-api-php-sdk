@@ -2,67 +2,56 @@
 namespace SatispayOnline;
 
 class Api {
-  private $env = "production";
-  private $privateKey;
-  private $publicKey;
-  private $serverPublicKey;
-  private $keyId;
-  private $securityBearer;
-  private $version = "2.0.0";
-
-  public $amounts;
-  public $charges;
-  public $checkouts;
-  public $refunds;
-  public $request;
-  public $users;
+  private static $env = "production";
+  private static $privateKey;
+  private static $publicKey;
+  private static $keyId;
+  private static $securityBearer;
+  private static $version = "2.0.0";
+  private static $authservicesUrl = "https://authservices.satispay.com";
 
   /**
    * Api constructor
    * @param array $options Api options
   */
-  public function __construct($options = []) {
-    if (!empty($options["env"])) {
-      $this->env = $options["env"];
-    }
+  // public function __construct($options = []) {
+  //   if (!empty($options["env"])) {
+  //     $this->env = $options["env"];
+  //   }
 
-    if (!empty($options["privateKey"])) {
-      $this->privateKey = $options["privateKey"];
-    }
+  //   if (!empty($options["privateKey"])) {
+  //     $this->privateKey = $options["privateKey"];
+  //   }
 
-    if (!empty($options["publicKey"])) {
-      $this->publicKey = $options["publicKey"];
-    }
+  //   if (!empty($options["publicKey"])) {
+  //     $this->publicKey = $options["publicKey"];
+  //   }
 
-    if (!empty($options["serverPublicKey"])) {
-      $this->serverPublicKey = $options["serverPublicKey"];
-    }
+  //   if (!empty($options["keyId"])) {
+  //     $this->keyId = $options["keyId"];
+  //   }
 
-    if (!empty($options["keyId"])) {
-      $this->keyId = $options["keyId"];
-    }
+  //   if (!empty($options["securityBearer"])) {
+  //     $this->securityBearer = $options["securityBearer"];
+  //   }
 
-    if (!empty($options["securityBearer"])) {
-      $this->securityBearer = $options["securityBearer"];
-    }
+  //   if (!empty($options["sandbox"]) && $options["sandbox"] === true) {
+  //     $this->env = "staging";
+  //   }
 
-    if (!empty($options["sandbox"]) && $options["sandbox"] === true) {
-      $this->env = "staging";
-    }
-
-    $this->amounts = new Amounts($this);
-    $this->charges = new Charges($this);
-    $this->checkouts = new Checkouts($this);
-    $this->refunds = new Refunds($this);
-    $this->request = new Request($this);
-    $this->users = new Users($this);
-  }
+  //   // $this->amounts = new Amounts($this);
+  //   // $this->charges = new Charges($this);
+  //   // $this->checkouts = new Checkouts($this);
+  //   // $this->refunds = new Refunds($this);
+  //   // $this->request = new Request($this);
+  //   // $this->users = new Users($this);
+  // }
 
   /**
    * Generate new keys and authenticate with token
    * @param string $token Authentication token
   */
-  public function authenticateWithToken($token) {
+  public static function authenticateWithToken($token) {
     $pkeyResource = openssl_pkey_new(array(
       "digest_alg" => "sha256",
       "private_key_bits" => 2048
@@ -73,120 +62,149 @@ class Api {
     $pkeyResourceDetails = openssl_pkey_get_details($pkeyResource);
     $generatedPublicKey = $pkeyResourceDetails["key"];
 
-    $requestResult = $this->request->post("/wally-services/v2/auth/authentication_keys", array(
+    $requestResult = Request::post("/g_business/v1/authentication_keys", array(
       "body" => array(
         "public_key" => $generatedPublicKey,
         "token" => $token
       )
     ));
 
-    $this->privateKey = $generatedPrivateKey;
-    $this->publicKey = $generatedPublicKey;
-    $this->keyId = $requestResult->access_key;
-    $this->serverPublicKey = $requestResult->secret_key;
+    self::$privateKey = $generatedPrivateKey;
+    self::$publicKey = $generatedPublicKey;
+    self::$keyId = $requestResult->key_id;
   }
 
   /**
    * Test authentication keys
   */
-  public function testAuthentication() {
-    $result = $this->request->post("/wally-services/protocol/tests", array(
-      "body" => array(
-        "hello" => "world"
-      ),
+  public static function testAuthentication() {
+    $result = Request::get("/wally-services/protocol/tests/signature", array(
       "sign" => true
     ));
 
     if ($result->authentication_key->role !== "ONLINE_SHOP") {
       throw new \Exception("Invalid authentication");
     }
+
+    return $result;
   }
 
   /**
-   * Get env value
-   * @return string Env value
+   * Get env
+   * @return string
   */
-  public function getEnv() {
-    return $this->env;
+  public static function getEnv() {
+    return self::$env;
+  }
+  /**
+   * Set env
+   * @param string $value
+  */
+  public static function setEnv($value) {
+    self::$env = $value;
+    if ($value == "production") {
+      self::$authservicesUrl = "https://authservices.satispay.com";
+    } else {
+      self::$authservicesUrl = "https://".$value.".authservices.satispay.com";
+    }
   }
 
   /**
-   * Get private key value
-   * @return string Private key value
+   * Get private key
+   * @return string
   */
-  public function getPrivateKey() {
-    return $this->privateKey;
+  public static function getPrivateKey() {
+    return self::$privateKey;
+  }
+  /**
+   * Set private key
+   * @param string $value
+  */
+  public static function setPrivateKey($value) {
+    self::$privateKey = $value;
   }
 
   /**
-   * Get public key value
-   * @return string Public key value
+   * Get public key
+   * @return string
   */
-  public function getPublicKey() {
-    return $this->publicKey;
+  public static function getPublicKey() {
+    return self::$publicKey;
+  }
+  /**
+   * Set public key
+   * @param string $value
+  */
+  public static function setPublicKey($value) {
+    self::$publicKey = $value;
   }
 
   /**
-   * Get server public key value
-   * @return string Server public key value
+   * Get key id
+   * @return string
   */
-  public function getServerPublicKey() {
-    return $this->serverPublicKey;
+  public static function getKeyId() {
+    return self::$keyId;
+  }
+  /**
+   * Set key id
+   * @param string $value
+  */
+  public static function setKeyId($value) {
+    self::$keyId = $value;
   }
 
   /**
-   * Get key id value
-   * @return string Key id value
+   * Get version 
+   * @return string
   */
-  public function getKeyId() {
-    return $this->keyId;
+  public static function getVersion() {
+    return self::$version;
   }
 
   /**
-   * Get version value
-   * @return string Version value
+   * Get authservices url 
+   * @return string
   */
-  public function getVersion() {
-    return $this->version;
+  public static function getAuthservicesUrl() {
+    return self::$authservicesUrl;
   }
 
   /**
    * Get security bearer
    * @return string Security bearer value
   */
-  public function getSecurityBearer() {
-    return $this->securityBearer;
+  public static function getSecurityBearer() {
+    return self::$securityBearer;
   }
-
-  // /**
-  //  * Get security bearer
-  //  * @param string $securityBearer
-  // */
-  // public function setSecurityBearer($securityBearer) {
-  //   $this->securityBearer = $securityBearer;
-  // }
+  /**
+   * Set security bearer
+   * @param string $securityBearer
+  */
+  public static function setSecurityBearer($securityBearer) {
+    self::$securityBearer = $securityBearer;
+  }
 
   /**
    * Is sandbox enabled?
    * @return boolean
   */
-  public function getSandbox() {
-    if ($this->env === "staging") {
+  public static function getSandbox() {
+    if (self::$env == "staging") {
       return true;
     } else {
       return false;
     }
   }
-
-  // /**
-  //  * Enable or disable sandbox
-  //  * @param boolean $value
-  // */
-  // public function setSandbox($value) {
-  //   if ($value === true) {
-  //     $this->env = "staging";
-  //   } else {
-  //     $this->env = "production";
-  //   }
-  // }
+  /**
+   * Enable or disable sandbox
+   * @param boolean $value
+  */
+  public static function setSandbox($value) {
+    if ($value == true) {
+      self::setEnv("staging");
+    } else {
+      self::setEnv("production");
+    }
+  }
 }
