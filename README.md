@@ -18,8 +18,15 @@ require_once("/path/init.php");
 ## Documentation
 https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
 
-## Authentication
-Sign in to your [Dashboard](https://business.satispay.com) at [business.satispay.com](https://business.satispay.com), click "Negozi Online" in the menu on the left, and then click on "Genera un token di attivazione" to generate an activation token.
+## Authenticate with Bearer
+Sign in to your [Dashboard](https://business.satispay.com) at [business.satispay.com](https://business.satispay.com), click "Negozi Online", click on "Crea codice di attivazione" and select "Security bearer" on top menu.
+
+```php
+\SatispayOnline\Api::setSecurityBearer("osh_...");
+```
+
+## Authenticate with RSA Signature
+Sign in to your [Dashboard](https://business.satispay.com) at [business.satispay.com](https://business.satispay.com), click "Negozi Online", and then click on "Genera un token di attivazione" to generate an activation token.
 
 Use the activation token with the `authenticateWithToken` function to generate and exchange a pair of RSA keys.
 
@@ -51,7 +58,7 @@ $keyId = "ldg9sbq283og7ua1abpj989kbbm2g60us6f18c1sciq...";
 ```
 
 ## Enable Sandbox
-To enable sandbox use `setSandbox` with value `true`.
+To enable sandbox use `setSandbox` function.
 ```php
 \SatispayOnline\Api::setSandbox(true);
 ```
