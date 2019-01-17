@@ -2,143 +2,209 @@
 namespace SatispayOnline;
 
 class Api {
-  public static $endpointStaging = 'https://staging.authservices.satispay.com';
-  public static $endpoint = 'https://authservices.satispay.com';
-  public static $version = '1.6.5';
+  private static $env = "production";
+  private static $privateKey;
+  private static $publicKey;
+  private static $keyId;
+  private static $securityBearer;
+  private static $version = "2.0.0";
+  private static $authservicesUrl = "https://authservices.satispay.com";
 
-  public static $securityBearer = '';
-  public static $staging = false;
-  public static $pluginName = '';
-  public static $pluginVersion = '';
-  public static $platformVersion = '';
-  public static $type = 'API';
+  /**
+   * Api constructor
+   * @param array $options Api options
+  */
+  // public function __construct($options = []) {
+  //   if (!empty($options["env"])) {
+  //     $this->env = $options["env"];
+  //   }
 
-  public static function setSecurityBearer($securityBearer) {
-    self::$securityBearer = $securityBearer;
+  //   if (!empty($options["privateKey"])) {
+  //     $this->privateKey = $options["privateKey"];
+  //   }
+
+  //   if (!empty($options["publicKey"])) {
+  //     $this->publicKey = $options["publicKey"];
+  //   }
+
+  //   if (!empty($options["keyId"])) {
+  //     $this->keyId = $options["keyId"];
+  //   }
+
+  //   if (!empty($options["securityBearer"])) {
+  //     $this->securityBearer = $options["securityBearer"];
+  //   }
+
+  //   if (!empty($options["sandbox"]) && $options["sandbox"] === true) {
+  //     $this->env = "staging";
+  //   }
+
+  //   // $this->amounts = new Amounts($this);
+  //   // $this->charges = new Charges($this);
+  //   // $this->checkouts = new Checkouts($this);
+  //   // $this->refunds = new Refunds($this);
+  //   // $this->request = new Request($this);
+  //   // $this->users = new Users($this);
+  // }
+
+  /**
+   * Generate new keys and authenticate with token
+   * @param string $token Authentication token
+  */
+  public static function authenticateWithToken($token) {
+    $pkeyResource = openssl_pkey_new(array(
+      "digest_alg" => "sha256",
+      "private_key_bits" => 2048
+    ));
+
+    openssl_pkey_export($pkeyResource, $generatedPrivateKey);
+
+    $pkeyResourceDetails = openssl_pkey_get_details($pkeyResource);
+    $generatedPublicKey = $pkeyResourceDetails["key"];
+
+    $requestResult = Request::post("/g_business/v1/authentication_keys", array(
+      "body" => array(
+        "public_key" => $generatedPublicKey,
+        "token" => $token
+      )
+    ));
+
+    self::$privateKey = $generatedPrivateKey;
+    self::$publicKey = $generatedPublicKey;
+    self::$keyId = $requestResult->key_id;
   }
+
+  /**
+   * Test authentication keys
+  */
+  public static function testAuthentication() {
+    $result = Request::get("/wally-services/protocol/tests/signature", array(
+      "sign" => true
+    ));
+
+    if ($result->authentication_key->role !== "ONLINE_SHOP") {
+      throw new \Exception("Invalid authentication");
+    }
+
+    return $result;
+  }
+
+  /**
+   * Get env
+   * @return string
+  */
+  public static function getEnv() {
+    return self::$env;
+  }
+  /**
+   * Set env
+   * @param string $value
+  */
+  public static function setEnv($value) {
+    self::$env = $value;
+    if ($value == "production") {
+      self::$authservicesUrl = "https://authservices.satispay.com";
+    } else {
+      self::$authservicesUrl = "https://".$value.".authservices.satispay.com";
+    }
+  }
+
+  /**
+   * Get private key
+   * @return string
+  */
+  public static function getPrivateKey() {
+    return self::$privateKey;
+  }
+  /**
+   * Set private key
+   * @param string $value
+  */
+  public static function setPrivateKey($value) {
+    self::$privateKey = $value;
+  }
+
+  /**
+   * Get public key
+   * @return string
+  */
+  public static function getPublicKey() {
+    return self::$publicKey;
+  }
+  /**
+   * Set public key
+   * @param string $value
+  */
+  public static function setPublicKey($value) {
+    self::$publicKey = $value;
+  }
+
+  /**
+   * Get key id
+   * @return string
+  */
+  public static function getKeyId() {
+    return self::$keyId;
+  }
+  /**
+   * Set key id
+   * @param string $value
+  */
+  public static function setKeyId($value) {
+    self::$keyId = $value;
+  }
+
+  /**
+   * Get version 
+   * @return string
+  */
+  public static function getVersion() {
+    return self::$version;
+  }
+
+  /**
+   * Get authservices url 
+   * @return string
+  */
+  public static function getAuthservicesUrl() {
+    return self::$authservicesUrl;
+  }
+
+  /**
+   * Get security bearer
+   * @return string Security bearer value
+  */
   public static function getSecurityBearer() {
     return self::$securityBearer;
   }
-
-  public static function setSandbox($sandbox) {
-    self::setStaging($sandbox);
+  /**
+   * Set security bearer
+   * @param string $securityBearer
+  */
+  public static function setSecurityBearer($securityBearer) {
+    self::$securityBearer = $securityBearer;
   }
+
+  /**
+   * Is sandbox enabled?
+   * @return boolean
+  */
   public static function getSandbox() {
-    return self::getStaging();
-  }
-  public static function setStaging($staging) {
-    self::$staging = $staging;
-  }
-  public static function getStaging() {
-    return self::$staging;
-  }
-
-  public static function getPluginName() {
-    return self::$pluginName;
-  }
-  public static function setPluginName($pluginName) {
-    self::$pluginName = $pluginName;
-  }
-
-  public static function getPluginVersion() {
-    return self::$pluginVersion;
-  }
-  public static function setPluginVersion($pluginVersion) {
-    self::$pluginVersion = $pluginVersion;
-  }
-
-  public static function getPlatformVersion() {
-    return self::$platformVersion;
-  }
-  public static function setPlatformVersion($platformVersion) {
-    self::$platformVersion = $platformVersion;
-  }
-
-  public static function getType() {
-    return self::$type;
-  }
-  public static function setType($type) {
-    self::$type = $type;
-  }
-
-  public static function getHeaders() {
-    return array(
-      'Authorization: Bearer '.self::$securityBearer,
-      'X-Satispay-Plugin-Name: '.self::getPluginName(),
-      'X-Satispay-Plugin-Version: '.self::getPluginVersion(),
-      'X-Satispay-Platformv: '.self::getPlatformVersion(),
-      'X-Satispay-Type: '.self::getType(),
-      'User-Agent: SatispayOnlineApi-PHPSDK/'.self::$version
-    );
-  }
-
-  public static function request($url, $method = null, $params = null) {
-    $opts = array();
-    $curl = curl_init();
-    $method = strtolower($method);
-
-    $api = self::$endpoint;
-    if (self::$staging) {
-      $api = self::$endpointStaging;
-    }
-
-    $opts[CURLOPT_URL] = $api.$url;
-    $opts[CURLOPT_RETURNTRANSFER] = true;
-
-    $headers = self::getHeaders();
-
-    if ($method == 'post') {
-      $opts[CURLOPT_POST] = 1;
-      $opts[CURLOPT_POSTFIELDS] = json_encode($params);
-      
-      $headers[] = 'Content-Type: application/json';
-    } else if ($method == 'put') {
-      $opts[CURLOPT_CUSTOMREQUEST] = 'PUT';
-      $opts[CURLOPT_POST] = 1;
-      $opts[CURLOPT_POSTFIELDS] = json_encode($params);
-
-      $headers[] = 'Content-Type: application/json';
-    } else if ($method == 'patch') {
-      $opts[CURLOPT_CUSTOMREQUEST] = 'PATCH';
-      $opts[CURLOPT_POST] = 1;
-      $opts[CURLOPT_POSTFIELDS] = json_encode($params);
-
-      $headers[] = 'Content-Type: application/json';
+    if (self::$env == "staging") {
+      return true;
     } else {
-      $opts[CURLOPT_HTTPGET] = 1;
+      return false;
     }
-
-    $opts[CURLOPT_HTTPHEADER] = $headers;
-
-    curl_setopt_array($curl, $opts);
-
-    $rawBody = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-    $errorn = curl_errno($curl);
-    $error = curl_error($curl);
-
-    curl_close($curl);
-
-    if (!empty($errorn) && !empty($error)) {
-      throw new \Exception($error, $errorn);
+  }
+  /**
+   * Enable or disable sandbox
+   * @param boolean $value
+  */
+  public static function setSandbox($value) {
+    if ($value == true) {
+      self::setEnv("staging");
+    } else {
+      self::setEnv("production");
     }
-
-    $isSuccess = true;
-    if ($status < 200 || $status > 299) {
-      $isSuccess = false;
-    }
-
-    $body = json_decode($rawBody);
-
-    if (!$isSuccess) {
-      if (!empty($body->message) && !empty($body->code)) {
-        throw new \Exception($body->message, $body->code);
-      } else {
-        throw new \Exception('HTTP status response is '.$status);
-      }
-    }
-
-    return $body;
   }
 }

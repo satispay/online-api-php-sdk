@@ -1,24 +1,40 @@
 <?php
 namespace SatispayOnline;
 
-use SatispayOnline\Api;
-
 class User {
-  public static function create($params = null) {
-    $result = Api::request('/online/v1/users', 'POST', $params);
-    return $result;
+  /**
+   * Create user
+   * @param array $body User body
+  */
+  public static function create($body) {
+    return Request::post("/online/v1/users", array(
+      "body" => $body,
+      "sign" => true
+    ));
   }
 
-  public static function all($params = null) {
-    $queryString = '';
-    if (!empty($params))
-      $queryString = http_build_query($params);
-    $result = Api::request('/online/v1/users?'.$queryString);
-    return $result;
-  }
-
+  /**
+   * Get user
+   * @param string $id User id
+  */
   public static function get($id) {
-    $result = Api::request('/online/v1/users/'.$id);
-    return $result;
+    return Request::get("/online/v1/users/$id", array(
+      "sign" => true
+    ));
+  }
+
+  /**
+   * Get users list
+   * @param array $options Options
+  */
+  public static function all($options = array()) {
+    $queryString = "";
+    if (!empty($options)) {
+      $queryString .= "?";
+      $queryString .= http_build_query($options);
+    }
+    return Request::get("/online/v1/users$queryString", array(
+      "sign" => true
+    ));
   }
 }

@@ -1,29 +1,52 @@
 <?php
 namespace SatispayOnline;
 
-use SatispayOnline\Api;
-
 class Refund {
-  public static function create($params = null) {
-    $result = Api::request('/online/v1/refunds', 'POST', $params);
-    return $result;
+  /**
+   * Create refund
+   * @param array $body Refund body
+  */
+  public static function create($body) {
+    return Request::post("/online/v1/refunds", array(
+      "body" => $body,
+      "sign" => true
+    ));
   }
 
-  public static function all($params = null) {
-    $queryString = '';
-    if (!empty($params))
-      $queryString = http_build_query($params);
-    $result = Api::request('/online/v1/refunds?'.$queryString);
-    return $result;
-  }
-
+  /**
+   * Get refund
+   * @param string $id Refund id
+  */
   public static function get($id) {
-    $result = Api::request('/online/v1/refunds/'.$id);
-    return $result;
+    return Request::get("/online/v1/refunds/$id", array(
+      "sign" => true
+    ));
   }
 
-  public static function update($id, $params = null) {
-    $result = Api::request('/online/v1/refunds/'.$id, 'PUT', $params);
-    return $result;
+  /**
+   * Get refunds list
+   * @param array $options Options
+  */
+  public static function all($options = array()) {
+    $queryString = "";
+    if (!empty($options)) {
+      $queryString .= "?";
+      $queryString .= http_build_query($options);
+    }
+    return Request::get("/online/v1/refunds$queryString", array(
+      "sign" => true
+    ));
+  }
+
+  /**
+   * Update refund
+   * @param string $id Refund id
+   * @param array $body Refund body
+  */
+  public static function update($id, $body) {
+    return Request::put("/online/v1/refunds/$id", array(
+      "body" => $body,
+      "sign" => true
+    ));
   }
 }

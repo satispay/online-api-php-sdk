@@ -1,137 +1,64 @@
 # Satispay Online API PHP SDK
-
 [![Packagist Version](https://img.shields.io/packagist/v/satispay/online-api-php-sdk.svg?style=flat-square)](https://packagist.org/packages/satispay/online-api-php-sdk)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/satispay/online-api-php-sdk.svg?style=flat-square)](https://packagist.org/packages/satispay/online-api-php-sdk)
 
-## Composer Installation
-
+## Installation
 Run the following command:
 
 ```bash
 composer require satispay/online-api-php-sdk
 ```
 
-## Manual Installation
-
-If you do not wish to use Composer, require the `init.php` file.
+If you do not wish to use Composer, import the `init.php` file.
 
 ```php
-require_once('/path/init.php');
-```
-
-## Getting Started
-
-```php
-// Set security bearer
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-// Set sandbox, true or false (not mandatory), default false
-\SatispayOnline\Api::setSandbox(true);
+require_once("/path/init.php");
 ```
 
 ## Documentation
-
 https://s3-eu-west-1.amazonaws.com/docs.online.satispay.com/index.html
 
-## Examples
-
-### Check bearer
+## Authenticate with Bearer
+Sign in to your [Dashboard](https://business.satispay.com) at [business.satispay.com](https://business.satispay.com), click "Negozi Online", click on "Crea codice di attivazione" and select "Security bearer" on top menu.
 
 ```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-try {
-  \SatispayOnline\Bearer::check();
-  echo 'OK';
-} catch(\Exception $ex) {
-  echo 'Invalid Security Bearer';
-}
+\SatispayOnline\Api::setSecurityBearer("osh_...");
 ```
 
-### Users
+## Authenticate with RSA Signature
+Sign in to your [Dashboard](https://business.satispay.com) at [business.satispay.com](https://business.satispay.com), click "Negozi Online", and then click on "Genera un token di attivazione" to generate an activation token.
 
-Create user
+Use the activation token with the `authenticateWithToken` function to generate and exchange a pair of RSA keys.
+
+Save the keys in your database or in a **safe place** not accesibile from your website.
 ```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
+// Authenticate and generate the keys
+\SatispayOnline\Api::authenticateWithToken("XXXXXX");
 
-$user = \SatispayOnline\User::create([
-  'phone_number' => '+390000000000'
-]);
+// Export keys
+$publicKey = \SatispayOnline\Api::getPublicKey();
+$privateKey = \SatispayOnline\Api::getPrivateKey();
+$keyId = \SatispayOnline\Api::getKeyId();
 ```
 
-Get users
+Reuse the keys after authentication.
 ```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
+// Keys variables
+$publicKey = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhk...";
+$privateKey = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBg...";
+$keyId = "ldg9sbq283og7ua1abpj989kbbm2g60us6f18c1sciq...";
 
-$users = \SatispayOnline\User::all();
+// Set keys
+\SatispayOnline\Api::setPublicKey($publicKey);
+\SatispayOnline\Api::setPrivateKey($privateKey);
+\SatispayOnline\Api::setKeyId($keyId);
+
+// Test the authentication
+\SatispayOnline\Api::testAuthentication();
 ```
 
-Get user
+## Enable Sandbox
+To enable sandbox use `setSandbox` function.
 ```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$user = \SatispayOnline\User::get('userid');
-```
-
-### Charges
-
-Create charge
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$charge = \SatispayOnline\Charge::create([
-  'user_id' => 'userid',
-  'currency' => 'EUR',
-  'amount' => 1000
-]);
-```
-
-Get charges
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$charges = \SatispayOnline\Charge::all();
-```
-
-Get charge
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$charge = \SatispayOnline\Charge::get('chargeid');
-```
-
-Update charge
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$charge = \SatispayOnline\Charge::update('chargeid', [
-  'description' => 'newdescription'
-]);
-```
-
-### Refunds
-
-Create refund
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$refund = \SatispayOnline\Refund::create([
-  'charge_id' => 'chargeid',
-  'currency' => 'EUR',
-  'amount' => 1000
-]);
-```
-
-Get refunds
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$refunds = \SatispayOnline\Refund::all();
-```
-
-Get refund
-```php
-\SatispayOnline\Api::setSecurityBearer('yoursecuritybearer');
-
-$refund = \SatispayOnline\Refund::get('refundid');
+\SatispayOnline\Api::setSandbox(true);
 ```

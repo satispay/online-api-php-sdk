@@ -9,15 +9,16 @@
     "php",
     "sdk"
   ],
-  "version": "1.6.5",
+  "homepage": "https://www.satispay.com",
+  "version": "2.0.0",
   "authors": [
     {
       "name": "Satispay",
-      "homepage": "http://satispay.com"
+      "homepage": "https://www.satispay.com"
     }
   ],
   "require": {
-    "php": ">=5.5",
+    "php": ">=5.4.0",
     "ext-curl": "*",
     "ext-json": "*",
     "ext-mbstring": "*"
