@@ -1,6 +1,12 @@
 <?php
 namespace SatispayOnline;
 
+class ApiAuthentication {
+  public $privateKey;
+  public $publicKey;
+  public $keyId;
+}
+
 class Api {
   private static $env = "production";
   private static $privateKey;
@@ -35,6 +41,12 @@ class Api {
     self::$privateKey = $generatedPrivateKey;
     self::$publicKey = $generatedPublicKey;
     self::$keyId = $requestResult->key_id;
+
+    $returnClass = new ApiAuthentication();
+    $returnClass->privateKey = $generatedPrivateKey;
+    $returnClass->publicKey = $generatedPublicKey;
+    $returnClass->keyId = $requestResult->key_id;
+    return $returnClass;
   }
 
   /**

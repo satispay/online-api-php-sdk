@@ -2,6 +2,8 @@
 namespace SatispayOnline;
 
 class Request {
+  private static $userAgentName = "SatispayOnlineApiPhpSdk";
+
   /**
    * GET request
    * @param string $path
@@ -90,25 +92,25 @@ class Request {
     $securityBearer = Api::getSecurityBearer();
 
     if (!empty($privateKey) && !empty($keyId)) {
-      $digest = base64_encode(hash("sha256", $options["body"], true));
-      array_push($headers, "Digest: SHA-256=".$digest);
-
       $date = date("r");
       array_push($headers, "Date: ".$date);
 
       $signature = "(request-target): ".strtolower($options["method"])." ".$options["path"]."\n";
       $signature .= "host: ".str_replace("https://", "", Api::getAuthservicesUrl())."\n";
       if (!empty($options["body"])) {
+        $digest = base64_encode(hash("sha256", $options["body"], true));
+        array_push($headers, "Digest: SHA-256=".$digest);
+
         $signature .= "content-type: application/json\n";
         $signature .= "content-length: ".strlen($options["body"])."\n";
+        $signature .= "digest: SHA-256=$digest\n";
       }
-      $signature .= "digest: SHA-256=$digest\n";
       $signature .= "date: $date";
 
       openssl_sign($signature, $signedSignature, $privateKey, OPENSSL_ALGO_SHA256);
       $base64SignedSignature = base64_encode($signedSignature);
 
-      $signatureHeaders = "(request-target) host digest date";
+      $signatureHeaders = "(request-target) host date";
       if (!empty($options["body"])) {
         $signatureHeaders = "(request-target) host content-type content-length digest date";
       }
@@ -135,7 +137,7 @@ class Request {
     $body = "";
     $headers = array(
       "Accept: application/json",
-      "User-Agent: SatispayOnlineApiPhpSdk/".Api::getVersion()
+      "User-Agent: ".self::$userAgentName."/".Api::getVersion()
     );
     $method = "GET";
 

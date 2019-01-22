@@ -33,12 +33,12 @@ Use the activation token with the `authenticateWithToken` function to generate a
 Save the keys in your database or in a **safe place** not accesibile from your website.
 ```php
 // Authenticate and generate the keys
-\SatispayOnline\Api::authenticateWithToken("XXXXXX");
+$authentication = \SatispayOnline\Api::authenticateWithToken("XXXXXX");
 
 // Export keys
-$publicKey = \SatispayOnline\Api::getPublicKey();
-$privateKey = \SatispayOnline\Api::getPrivateKey();
-$keyId = \SatispayOnline\Api::getKeyId();
+$publicKey = $authentication->publicKey;
+$privateKey = $authentication->privateKey;
+$keyId = $authentication->keyId;
 ```
 
 Reuse the keys after authentication.
