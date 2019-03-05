@@ -2,6 +2,9 @@
 [![Packagist Version](https://img.shields.io/packagist/v/satispay/online-api-php-sdk.svg?style=flat-square)](https://packagist.org/packages/satispay/online-api-php-sdk)
 [![Packagist Downloads](https://img.shields.io/packagist/dt/satispay/online-api-php-sdk.svg?style=flat-square)](https://packagist.org/packages/satispay/online-api-php-sdk)
 
+## Deprecated API
+For new integrations please use https://github.com/satispay/gbusiness-api-php-sdk.
+
 ## Installation
 Run the following command:
 
